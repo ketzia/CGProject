@@ -20,7 +20,7 @@ public:
 
 	void draw();
 
-	// Instance these in the constructor:
+
 	Wheel* first;
 	Wheel* second;
 	Wheel* third;
