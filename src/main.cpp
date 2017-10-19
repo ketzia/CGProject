@@ -15,6 +15,8 @@
 #endif
 
 #include "cCar.h"
+#include "vectors.h"
+
 Car* myCar;
 
 void init()
