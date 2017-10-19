@@ -10,21 +10,7 @@
 	#include <math.h>
 #endif
 
-#include "cWheel.h"
+class Car {
 
-class Car
-{
-public:
-	Car();
-	~Car();
-
-	void draw();
-
-
-	Wheel* first;
-	Wheel* second;
-	Wheel* third;
-	Wheel* fourth;
-	float zRot;
 };
 
