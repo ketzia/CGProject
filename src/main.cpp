@@ -14,39 +14,103 @@
 	#include <math.h>
 #endif
 
-#include "cCar.h"
+#include "rectangle.h"
 #include "vectors.h"
+#include "soccerField.h"
+#include "soccerBall.h"
+#include "color.h"
+#include <stdio.h>
 
-Car* myCar;
+SoccerField* soccerField;
+Rectangle* rectangle;
+SoccerBall* ball;
 
-void init()
-{
-	myCar = new Car();
+vector3 ballPosition;
+
+float angle = 0.0f;
+float lx=0.0f,lz=-1.0f;
+float x=0.0f, z=5.0f;
+
+float deltaAngle = 0.0f;
+float deltaMove = 0;
+int xOrigin = -1;
+
+void computePos(float deltaMove) {
+    x += deltaMove * lx * 0.1f;
+    z += deltaMove * lz * 0.1f;
+}
+
+void OnMouseDown(int button, int state, int x, int y) {
+    // only start motion if the left button is pressed
+    if (button == GLUT_RIGHT_BUTTON) {
+        
+        // when the button is released
+        if (state == GLUT_UP) {
+            angle += deltaAngle;
+            xOrigin = -1;
+        }
+        else  {// state = GLUT_DOWN
+            xOrigin = x;
+        }
+    }
+}
+
+void OnMouseMove(int x, int y) {
+    // this will only be true when the left button is down
+    if (xOrigin >= 0) {
+        
+        // update deltaAngle
+        deltaAngle = (x - xOrigin) * 0.001f;
+        
+        // update camera's direction
+        lx = sin(angle + deltaAngle);
+        lz = -cos(angle + deltaAngle);
+    }
+}
+
+void init() {
+    Color GRASS_GREEN;GRASS_GREEN.r = 0.27;GRASS_GREEN.g = 0.47;GRASS_GREEN.b = 0.24;
+    Color RED;RED.r = 1.0;RED.g = 0.0;RED.b=0.0;
+    ballPosition.x = 0.0;ballPosition.y = 0;ballPosition.z =0;
+
 	glShadeModel(GL_SMOOTH);
 	glEnable(GL_DEPTH_TEST);
 	glClearColor(0.0, 0.0, 0.0, 0.0);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
+    
+    soccerField = new SoccerField(14, 14, -1, GRASS_GREEN);
+    ball = new SoccerBall(0.1,&(ballPosition),RED);
+
 }
 
-void display()
-{
+void display() {
+    if (deltaMove)
+        computePos(deltaMove);
+    
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glLoadIdentity();
+    gluLookAt(x, 1.0, z,
+              x+lx, 1.0, z+lz,
+              0.0, 1.0, 0.0);
+    soccerField->draw();
+    ball->draw();
+    //rectangle->draw();
 
 	glutSwapBuffers();
 }
 
-void idle()
-{
-
+void idle() {
 	glutPostRedisplay();
+    ballPosition.x += 0.01;
+    ballPosition.z += 0.01;
+    //printf("X-ball: %f\n",ballPosition.x);
 }
 
-void reshape(int x, int y)
-{
+void reshape(int x, int y) {
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(40.0, (GLdouble)x / (GLdouble)y, 0.5, 20.0);
+	gluPerspective(80.0, (GLdouble)x / (GLdouble)y, 0.5, 20.0);
 	glMatrixMode(GL_MODELVIEW);
 	glViewport(0, 0, x, y);
 	gluLookAt(0.0, 3.0, 10.0,
@@ -66,6 +130,9 @@ int main(int argc, char* argv[])
 	glutReshapeFunc(reshape);
 	glutDisplayFunc(display);
 	glutIdleFunc(idle);
+    
+    glutMouseFunc(OnMouseDown);
+    glutMotionFunc(OnMouseMove);
 
 	glutMainLoop();
 	return 0;
