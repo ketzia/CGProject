@@ -12,7 +12,7 @@ void SoccerBall::draw() {
     glPushMatrix();{
         glTranslatef(position->x, position->y, position->z);
         glColor3f(color.r, color.g, color.b);
-        glutWireSphere(radius, 30, 30);
+        glutWireSphere(radius, 10, 10);
     }glPopMatrix();
     glColor3f(1, 1, 1);
 }

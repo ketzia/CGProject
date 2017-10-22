@@ -12,6 +12,7 @@
 
 #include "rectangle.h"
 #include "color.h"
+#include "vectors.h"
 
 class SoccerField {
 
@@ -26,9 +27,9 @@ public:
     
     void draw();
     
-
+private:
     
-    
+    vector3 topLeft_b, topRight_b, lowLeft_b, lowRight_b;
     
     
 };

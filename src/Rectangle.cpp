@@ -1,6 +1,5 @@
 #include "rectangle.h"
 
-
 Rectangle::Rectangle(float h, float w, float d) {
     height = h;
     width = w;
