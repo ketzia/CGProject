@@ -5,15 +5,16 @@
 
 #define PI 3.14159265
 
-PlayerNPC::PlayerNPC(float height, float width, vector3 * position, float *rotationY, Color color) {
+PlayerNPC::PlayerNPC(float height, float width, float *rotationY, float *speed, Color color) {
     // Player properties
     this->height = height;
     this->width = width;
     this->color = color;
     
     // Movement properties
-    this->position = position;
+    this->position.x =0;this->position.y =0;this->position.z =0;
     this->rotationY = rotationY;
+    this->speed = speed;
     this->initialDirection.x = 1;this->initialDirection.y=0;this->initialDirection.z = 0; // Direction is (1,0,0)
     
     // Create rotation matrix
@@ -27,30 +28,32 @@ PlayerNPC::PlayerNPC(float height, float width, vector3 * position, float *rotat
 
 void PlayerNPC::draw() {
     glPushMatrix();{
-        /*
-        glTranslatef(position->x, position->y, position->z);
-        glRotatef(*rotation,0 , 1, 0);
-        glColor3f(color.r, color.g, color.b);
-        player->draw();
-         */
-       
-        glColor3f(color.r, color.g, color.b);
         
+        glColor3f(color.r, color.g, color.b);
         recalculateRotationMatrix(*rotationY);
         vector3 directionVector = calculateDirection();
-        printf("Direction in x: %f\n", directionVector.x);
+        position.x += directionVector.x * (*(float*)speed);
+        position.y += directionVector.y * (*(float*)speed);
+        position.z += directionVector.z * (*(float*)speed);
         
-        float x = position->x + directionVector.x;
-        float y = position->y + directionVector.y;
-        float z = position->z + directionVector.z;
+        //glRotatef(*rotationY, 0, 1, 0);
+        glTranslatef(position.x, position.y, position.z);
+        //player->draw();
         
-        glTranslatef(x, y, z);
+        glPushMatrix();{
+            // Draw pointer line
+            glColor3f(1, 0, 0);
+            glRotatef(*rotationY, 0, 1, 0);
+            glTranslatef(0.1, 0, 0);
+            glutWireCube(0.3);
+        }glPopMatrix();
         
- 
-        player->draw();
         
     }glPopMatrix();
     glColor3f(1, 1, 1);
+    
+    
+    
 }
 
 
@@ -77,9 +80,6 @@ vector3 PlayerNPC::calculateDirection() {
     newDirection.x = x;
     newDirection.y = y;
     newDirection.z = z;
-    
-    printf("Current x value: %f\n",newDirection.x);
-    
     return newDirection;
 }
 

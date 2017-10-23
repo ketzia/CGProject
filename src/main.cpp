@@ -26,7 +26,7 @@ SoccerField* soccerField;
 Rectangle* rectangle;
 SoccerBall* ball;
 PlayerNPC* player_one;
-PlayerNPC* player_two;
+//PlayerNPC* player_two;
 
 vector3 ballPosition, posPlayerOne, posPlayerTwo;
 
@@ -45,24 +45,26 @@ void keyPressed(unsigned char key, int x, int y) {
     pressedKeys[key] = true;
     
     if(pressedKeys['w']) {
-        posPlayerOne.z -= speedPlayerOne;
+        speedPlayerOne = 0.01f;
     }
     
     if(pressedKeys['s']) {
-        posPlayerOne.z += speedPlayerOne;
+        speedPlayerOne = -0.01f;
     }
     
     if(pressedKeys['a']) {
-        rotationPlayerOne += 5;
+        rotationPlayerOne += 45;
     }
     
     if(pressedKeys['d']) {
-        rotationPlayerOne -= 5;
+        rotationPlayerOne -= 45;
     }
 }
 
 void keyUp(unsigned char key, int x, int y){
     pressedKeys[key] = false;
+    
+    speedPlayerOne = 0.0f;
 }
 
 void computePos(float deltaMove) {
@@ -108,8 +110,8 @@ void init() {
     rotationPlayerTwo = 0.0f;
     
     // Character speeds
-    speedPlayerOne = 0.3f;
-    speedPlayerTwo = 0.3f;
+    speedPlayerOne = 0;
+    speedPlayerTwo = 0;
     
     // OpenGL Code
 	glShadeModel(GL_SMOOTH);
@@ -121,8 +123,8 @@ void init() {
     // Instantiate all Characters
     soccerField = new SoccerField(14, 14, -1, GRASS_GREEN);
     ball = new SoccerBall(0.1,&(ballPosition),RED);
-    player_one = new PlayerNPC(0.7, 0.1, &(posPlayerOne), &(rotationPlayerOne), DEEPSKYBLUE);
-    player_two = new PlayerNPC(0.7, 0.1, &(posPlayerTwo), &(rotationPlayerTwo), MONZA);
+    player_one = new PlayerNPC(0.2, 0.2, &(rotationPlayerOne), &(speedPlayerOne), DEEPSKYBLUE);
+    //player_two = new PlayerNPC(0.7, 0.1, &(rotationPlayerTwo), MONZA);
 
 }
 
@@ -130,6 +132,10 @@ void display() {
     
     if (deltaMove) {
         computePos(deltaMove);
+    }
+    
+    if(rotationPlayerOne > 360) {
+        rotationPlayerOne = rotationPlayerOne - 360;
     }
     
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -142,7 +148,7 @@ void display() {
     soccerField->draw();
     ball->draw();
     player_one->draw();
-    player_two->draw();
+    //player_two->draw();
 
 	glutSwapBuffers();
 }

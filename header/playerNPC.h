@@ -17,15 +17,19 @@
 class PlayerNPC {
     
 public:
-    PlayerNPC(float height, float width, vector3 * position, float *rotationY, Color color);
+    PlayerNPC(float height, float width, float *rotationY, float *speed, Color color);
     ~PlayerNPC();
     
     Rectangle* player;
     float *rotationY;
+    float *speed;
+    
     float height,width;
-    vector3 * position;
-    vector3 initialDirection;
     Color color;
+    
+    vector3 position;
+    vector3 initialDirection;
+    
     float** rotationMatrix;
     
     void draw();
