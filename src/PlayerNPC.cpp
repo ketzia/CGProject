@@ -36,16 +36,16 @@ void PlayerNPC::draw() {
         position.y += directionVector.y * (*(float*)speed);
         position.z += directionVector.z * (*(float*)speed);
         
-        //glRotatef(*rotationY, 0, 1, 0);
         glTranslatef(position.x, position.y, position.z);
-        //player->draw();
+        glRotatef(*rotationY, 0, 1, 0);
+        //glutWireCube(0.3);
+        glutWireTeapot(0.3);
         
         glPushMatrix();{
             // Draw pointer line
-            glColor3f(1, 0, 0);
-            glRotatef(*rotationY, 0, 1, 0);
-            glTranslatef(0.1, 0, 0);
-            glutWireCube(0.3);
+            //glColor3f(1, 0, 0);
+            //glRotatef(*rotationY, 0, 1, 0);
+            //glutWireCube(0.3);
         }glPopMatrix();
         
         

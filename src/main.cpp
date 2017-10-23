@@ -45,26 +45,29 @@ void keyPressed(unsigned char key, int x, int y) {
     pressedKeys[key] = true;
     
     if(pressedKeys['w']) {
-        speedPlayerOne = 0.01f;
+        speedPlayerOne = 0.05f;
     }
     
     if(pressedKeys['s']) {
-        speedPlayerOne = -0.01f;
+        speedPlayerOne = -0.05f;
     }
     
     if(pressedKeys['a']) {
-        rotationPlayerOne += 45;
+        rotationPlayerOne += 18;
     }
     
     if(pressedKeys['d']) {
-        rotationPlayerOne -= 45;
+        rotationPlayerOne -= 18;
     }
 }
 
 void keyUp(unsigned char key, int x, int y){
     pressedKeys[key] = false;
     
-    speedPlayerOne = 0.0f;
+    if(key == 'w' || key == 's') {
+        speedPlayerOne = 0.0f;
+    }
+    
 }
 
 void computePos(float deltaMove) {
