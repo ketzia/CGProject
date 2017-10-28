@@ -4,6 +4,9 @@
 *
  * Disclaimer: Some times both players share the same rotations and positions, we havent found the cause for this issue but we are
  working on it, if it happens just restart the app until all characters can move independently
+ It seems this bug dissapears when rotating the players FIRST and then moving them, If you try to move them first its going to break
+ 
+ To move the camera, hold the right mouse button and move the mouse right or left. You can play with the radius variable to make it move wider or shorter.
  
  Keys for player one: WASD
  Keys for player two: IJKL
