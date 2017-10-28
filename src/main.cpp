@@ -1,6 +1,12 @@
 /*
 * Ketzia Lizette Dante-Hidalgo Bouchot A01336592
 * Ernesto Perez Martinez A01214919
+*
+ * Disclaimer: Some times both players share the same rotations and positions, we havent found the cause for this issue but we are
+ working on it, if it happens just restart the app until all characters can move independently
+ 
+ Keys for player one: WASD
+ Keys for player two: IJKL
 */
 
 #ifdef __APPLE__
@@ -21,81 +27,42 @@
 #include "color.h"
 #include <stdio.h>
 #include "playerNPC.h"
+#include "utils.h"
 
+// Objects
 SoccerField* soccerField;
 Rectangle* rectangle;
 SoccerBall* ball;
 PlayerNPC* player_one;
-//PlayerNPC* player_two;
+PlayerNPC* player_two;
 
-vector3 ballPosition, posPlayerOne, posPlayerTwo;
+// Position of the ball to be used later
+vector3 ballPosition;
 
-float angle = 0.0f;
-float lx=0.0f,lz=-1.0f;
-float x=0.0f, z=5.0f;
-float deltaAngle = 0.0f;
-float deltaMove = 0;
-int xOrigin = -1;
+// Definitions for Player
+float speedPlayerOne;
+float speedPlayerTwo;
+float rotationPlayerOne;
+float rotationPlayerTwo;
 
-float speedPlayerOne, speedPlayerTwo, rotationPlayerOne, rotationPlayerTwo;
+// Definitions for the camera
+float radius;
+float worldRotation;
+float deltaMov;
+int isCameraMoving;
 
+// Array to store all pressed keys
 bool* pressedKeys;
 
-void keyPressed(unsigned char key, int x, int y) {
-    pressedKeys[key] = true;
-    
-    if(pressedKeys['w']) {
-        speedPlayerOne = 0.05f;
-    }
-    
-    if(pressedKeys['s']) {
-        speedPlayerOne = -0.05f;
-    }
-    
-    if(pressedKeys['a']) {
-        rotationPlayerOne += 18;
-    }
-    
-    if(pressedKeys['d']) {
-        rotationPlayerOne -= 18;
-    }
-}
-
-void keyUp(unsigned char key, int x, int y){
-    pressedKeys[key] = false;
-    
-    if(key == 'w' || key == 's') {
-        speedPlayerOne = 0.0f;
-    }
-    
-}
-
-void computePos(float deltaMove) {
-    x += deltaMove * lx * 0.1f;
-    z += deltaMove * lz * 0.1f;
-}
-
-void OnMouseDown(int button, int state, int x, int y) {
-    if (button == GLUT_RIGHT_BUTTON) {
-        if (state == GLUT_UP) {
-            angle += deltaAngle;
-            xOrigin = -1;
-        } else  {
-            xOrigin = x;
-        }
-    }
-}
-void OnMouseMove(int x, int y) {
-    if (xOrigin >= 0) {
-        deltaAngle = (x - xOrigin) * 0.001f;
-        lx = sin(angle + deltaAngle);
-        lz = -cos(angle + deltaAngle);
-    }
-}
-
 void init() {
-    // Array to store all keys
+    // Array to store all keys pressed so far
     pressedKeys = new bool[256];
+    
+    // Set up initial values for the camera, it is going to be turned in a radius of 9.0
+    deltaMov = 0.0f;
+    isCameraMoving = -1;
+    worldRotation = 0.0f;
+    radius = 5.0f;
     
     // Color constants
     Color GRASS_GREEN;GRASS_GREEN.r = 0.27;GRASS_GREEN.g = 0.47;GRASS_GREEN.b = 0.24;
@@ -103,10 +70,8 @@ void init() {
     Color DEEPSKYBLUE;DEEPSKYBLUE.r = 0.0;DEEPSKYBLUE.g = 0.75; DEEPSKYBLUE.b = 1.0;
     Color MONZA;MONZA.r = 0.81;MONZA.g = 0.0;MONZA.b = 0.06;
     
-    // Character positions
+    // Positions
     ballPosition.x = 0.0;ballPosition.y = 0;ballPosition.z =0;
-    posPlayerOne.x = -1.0;posPlayerOne.y = 0;posPlayerOne.z =0;
-    posPlayerTwo.x = 1.0;posPlayerTwo.y = 0;posPlayerTwo.z =0;
     
     // Character rotations
     rotationPlayerOne = 0.0f;
@@ -117,47 +82,117 @@ void init() {
     speedPlayerTwo = 0;
     
     // OpenGL Code
-	glShadeModel(GL_SMOOTH);
-	glEnable(GL_DEPTH_TEST);
-	glClearColor(0.0, 0.0, 0.0, 0.0);
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
+    glShadeModel(GL_SMOOTH);
+    glEnable(GL_DEPTH_TEST);
+    glClearColor(0.0, 0.0, 0.0, 0.0);
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
     
-    // Instantiate all Characters
-    soccerField = new SoccerField(14, 14, -1, GRASS_GREEN);
+    // Instantiate all Characters, this is going to be changed for models in the future
+    soccerField = new SoccerField(14, 28, -1, GRASS_GREEN);
     ball = new SoccerBall(0.1,&(ballPosition),RED);
-    player_one = new PlayerNPC(0.2, 0.2, &(rotationPlayerOne), &(speedPlayerOne), DEEPSKYBLUE);
-    //player_two = new PlayerNPC(0.7, 0.1, &(rotationPlayerTwo), MONZA);
+    player_one = new PlayerNPC(&(rotationPlayerOne), &(speedPlayerOne), DEEPSKYBLUE);
+    player_two = new PlayerNPC(&(rotationPlayerTwo), &(speedPlayerTwo), MONZA);
+    
+}
 
+
+
+void keyPressed(unsigned char key, int x, int y) {
+    pressedKeys[key] = true;
+    
+    if(pressedKeys['w']) {
+        speedPlayerOne = 0.05f;
+    }
+    if(pressedKeys['s']) {
+        speedPlayerOne = -0.05f;
+    }
+    if(pressedKeys['a']) {
+        rotationPlayerOne += 18;
+    }
+    if(pressedKeys['d']) {
+        rotationPlayerOne -= 18;
+    }
+    
+    if(pressedKeys['i']) {
+        speedPlayerTwo = 0.05f;
+    }
+    if(pressedKeys['k']) {
+        speedPlayerTwo = -0.05f;
+    }
+    if(pressedKeys['j']) {
+        rotationPlayerTwo += 18;
+    }
+    if(pressedKeys['l']) {
+        rotationPlayerTwo -= 18;
+    }
+    
+}
+
+void keyUp(unsigned char key, int x, int y){
+    pressedKeys[key] = false;
+    
+    if(key == 'w' || key == 's') {
+        speedPlayerOne = 0.0f;
+    }
+    
+    if(key == 'i' || key == 'k') {
+        speedPlayerTwo = 0.0f;
+    }
+    
+}
+
+
+
+void OnMouseDown(int button, int state, int x, int y) {
+    if (button == GLUT_RIGHT_BUTTON) {
+        if (state == GLUT_UP) {
+            //angle += deltaAngle;
+            isCameraMoving = -1;
+            //worldRotation += 5.0f;
+            //printf("moving something lol /n");
+        } else  {
+            isCameraMoving = x;
+        }
+    }
+}
+void OnMouseMove(int x, int y) {
+    if (isCameraMoving >= 0) {
+        deltaMov = (x - isCameraMoving) * 0.01f;
+        worldRotation += deltaMov;
+    }
 }
 
 void display() {
     
-    if (deltaMove) {
-        computePos(deltaMove);
-    }
-    
-    if(rotationPlayerOne > 360) {
-        rotationPlayerOne = rotationPlayerOne - 360;
-    }
-    
+  
+
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
-    gluLookAt(x, 1.0, z,
-              x+lx, 1.0, z+lz,
+    //gluLookAt(x, 1.0, z,
+      //        x+lx, 1.0, z+lz,
+        //      0.0, 1.0, 0.0);
+    
+    //gluLookAt(<#GLdouble eyeX#>, <#GLdouble eyeY#>, <#GLdouble eyeZ#>, <#GLdouble centerX#>, <#GLdouble centerY#>, <#GLdouble centerZ#>, <#GLdouble upX#>, <#GLdouble upY#>, <#GLdouble upZ#>)
+    gluLookAt(radius * cos(toRadians(worldRotation)), 3 ,radius * sin(toRadians(worldRotation)),
+              0, 0.2, 0,
               0.0, 1.0, 0.0);
     
     // Draw objects
-    soccerField->draw();
-    ball->draw();
-    player_one->draw();
-    //player_two->draw();
+    glPushMatrix();{
+        soccerField->draw();
+        ball->draw();
+        player_one->draw();
+        player_two->draw();
+    }glPopMatrix();
+   
 
 	glutSwapBuffers();
 }
 
 void idle() {
 	glutPostRedisplay();
+    //worldRotation += 0.1f;
 }
 
 void reshape(int x, int y) {

@@ -17,14 +17,12 @@
 class PlayerNPC {
     
 public:
-    PlayerNPC(float height, float width, float *rotationY, float *speed, Color color);
+    PlayerNPC(float *rotationY, float *speed, Color color);
     ~PlayerNPC();
     
-    Rectangle* player;
     float *rotationY;
     float *speed;
     
-    float height,width;
     Color color;
     
     vector3 position;

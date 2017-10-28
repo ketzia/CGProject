@@ -14,6 +14,13 @@ void Rectangle::draw() {
         
         // Lower Square
         glBegin(GL_QUADS);
+            glVertex3f(-width/2, 0, depth/2);
+            glVertex3f(width/2, 0, depth/2);
+            glVertex3f(width/2, 0, -depth/2);
+            glVertex3f(-width/2, 0, -depth/2);
+        glEnd();
+        /*
+        glBegin(GL_QUADS);
             glVertex3f(-width,0, -depth);
             glVertex3f(width,0, -depth);
             glVertex3f(width,0,0);
@@ -59,6 +66,7 @@ void Rectangle::draw() {
             glVertex3f(width,height,-depth);
             glVertex3f(width,height,0);
         glEnd();
+     */
         
     }glPopMatrix();
 }
