@@ -32,6 +32,10 @@
 #include "playerNPC.h"
 #include "utils.h"
 
+// Lights
+GLfloat* light0_position;
+
+
 // Objects
 SoccerField* soccerField;
 Rectangle* rectangle;
@@ -58,6 +62,17 @@ int isCameraMoving;
 bool* pressedKeys;
 
 void init() {
+    // Light setup
+    light0_position = new GLfloat[4];
+    light0_position[0] = 3;
+    light0_position[1] = 3;
+    light0_position[2] = 0;
+    light0_position[3] = 1;
+    glLightfv(GL_LIGHT0, GL_POSITION, light0_position);
+    glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHT0);
+    
+    
     // Array to store all keys pressed so far
     pressedKeys = new bool[256];
     
@@ -87,7 +102,9 @@ void init() {
     // OpenGL Code
     glShadeModel(GL_SMOOTH);
     glEnable(GL_DEPTH_TEST);
-    glClearColor(0.0, 0.0, 0.0, 0.0);
+    glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+    glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
+    glClearColor(DEEPSKYBLUE.r, DEEPSKYBLUE.g, DEEPSKYBLUE.b, 1.0);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     
@@ -97,6 +114,7 @@ void init() {
     player_one = new PlayerNPC(&(rotationPlayerOne), &(speedPlayerOne), DEEPSKYBLUE);
     player_two = new PlayerNPC(&(rotationPlayerTwo), &(speedPlayerTwo), MONZA);
     
+    glEnable(GL_NORMALIZE);
 }
 
 
@@ -177,6 +195,7 @@ void display() {
         //      0.0, 1.0, 0.0);
     
     //gluLookAt(<#GLdouble eyeX#>, <#GLdouble eyeY#>, <#GLdouble eyeZ#>, <#GLdouble centerX#>, <#GLdouble centerY#>, <#GLdouble centerZ#>, <#GLdouble upX#>, <#GLdouble upY#>, <#GLdouble upZ#>)
+
     gluLookAt(radius * cos(toRadians(worldRotation)), 3 ,radius * sin(toRadians(worldRotation)),
               0, 0.2, 0,
               0.0, 1.0, 0.0);
@@ -195,6 +214,7 @@ void display() {
 
 void idle() {
 	glutPostRedisplay();
+    //glEnable(GL_NORMALIZE);
     //worldRotation += 0.1f;
 }
 

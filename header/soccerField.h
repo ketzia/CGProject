@@ -10,6 +10,7 @@
     #include <math.h>
 #endif
 
+#include "goal.h"
 #include "rectangle.h"
 #include "color.h"
 #include "vectors.h"
@@ -29,7 +30,14 @@ public:
     
 private:
     
+    // Goals are just part of this class
+    Goal* goalOne;
+    Goal* goalTwo;
+    
     vector3 topLeft_b, topRight_b, lowLeft_b, lowRight_b;
+    GLfloat* mat_specular;
+    GLfloat* mat_diffuse;
+    GLfloat* mat_shininess;
     
     
 };
