@@ -8,13 +8,14 @@
 #include "utils.h"
 #include <stdio.h>
 #include <math.h>
+#include "glm.h"
 
-PlayerNPC::PlayerNPC(float *rotationY, float *speed, Color color) {
+PlayerNPC::PlayerNPC(float *rotationY, float *speed, Color color, float initialXPosition) {
     // Player properties
     this->color = color;
     
     // Movement properties
-    this->position.x =0;this->position.y =0;this->position.z =0;
+    this->position.x = initialXPosition;this->position.y =0;this->position.z =0;
     this->rotationY = rotationY;
     this->speed = speed;
     this->initialDirection.x = 1;this->initialDirection.y=0;this->initialDirection.z = 0; // Direction is (1,0,0)
@@ -24,6 +25,13 @@ PlayerNPC::PlayerNPC(float *rotationY, float *speed, Color color) {
     for(int i = 0; i < 3; ++i) {
         this->rotationMatrix[i] = new float[3];
     }
+    
+    // Player model
+    //model = glmReadOBJ("/Users/ernesto/Code/Graficas Computacionales/Models/SoldierCut/torso/torso.obj");
+    model = glmReadOBJ("/Users/ernesto/Code/Graficas Computacionales/Models/SoldierCut/torso/torso.obj");
+    glmScale(model,0.01);
+    glmVertexNormals(model, 45.0f, false);
+    glmFacetNormals(model);
 }
 
 void PlayerNPC::draw() {
@@ -39,6 +47,9 @@ void PlayerNPC::draw() {
         glTranslatef(position.x, position.y, position.z);
         glRotatef(*rotationY, 0, 1, 0);
         glutWireTeapot(0.3);
+        
+        glmDraw(model, GLM_SMOOTH);
+        
     
     }glPopMatrix();
     glColor3f(1, 1, 1);

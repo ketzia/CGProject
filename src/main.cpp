@@ -92,8 +92,8 @@ void init() {
     ballPosition.x = 0.0;ballPosition.y = 0;ballPosition.z =0;
     
     // Character rotations
-    rotationPlayerOne = 0.0f;
-    rotationPlayerTwo = 0.0f;
+    rotationPlayerOne = 45;
+    rotationPlayerTwo = -45;
     
     // Character speeds
     speedPlayerOne = 0;
@@ -111,8 +111,8 @@ void init() {
     // Instantiate all Characters, this is going to be changed for models in the future
     soccerField = new SoccerField(14, 28, -1, GRASS_GREEN);
     ball = new SoccerBall(0.1,&(ballPosition),RED);
-    player_one = new PlayerNPC(&(rotationPlayerOne), &(speedPlayerOne), DEEPSKYBLUE);
-    player_two = new PlayerNPC(&(rotationPlayerTwo), &(speedPlayerTwo), MONZA);
+    player_one = new PlayerNPC(&(rotationPlayerOne), &(speedPlayerOne), DEEPSKYBLUE, 1);
+    player_two = new PlayerNPC(&(rotationPlayerTwo), &(speedPlayerTwo), MONZA, -1);
     
     glEnable(GL_NORMALIZE);
 }
@@ -121,7 +121,7 @@ void init() {
 
 void keyPressed(unsigned char key, int x, int y) {
     pressedKeys[key] = true;
-    
+    printf("Pressed key %c", key );
     if(pressedKeys['w']) {
         speedPlayerOne = 0.05f;
     }
@@ -151,7 +151,7 @@ void keyPressed(unsigned char key, int x, int y) {
 }
 
 void keyUp(unsigned char key, int x, int y){
-    pressedKeys[key] = false;
+    
     
     if(key == 'w' || key == 's') {
         speedPlayerOne = 0.0f;
@@ -160,6 +160,8 @@ void keyUp(unsigned char key, int x, int y){
     if(key == 'i' || key == 'k') {
         speedPlayerTwo = 0.0f;
     }
+    
+    pressedKeys[key] = false;
     
 }
 
@@ -204,10 +206,15 @@ void display() {
     glPushMatrix();{
         soccerField->draw();
         ball->draw();
+    }glPopMatrix();
+    
+    glPushMatrix(); {
         player_one->draw();
-        player_two->draw();
     }glPopMatrix();
    
+    glPushMatrix(); {
+        player_two->draw();
+    }glPopMatrix();
 
 	glutSwapBuffers();
 }
@@ -216,6 +223,8 @@ void idle() {
 	glutPostRedisplay();
     //glEnable(GL_NORMALIZE);
     //worldRotation += 0.1f;
+    //printf("Speed player one: %f \n", speedPlayerOne);
+    //printf("Speed player two: %f \n", speedPlayerTwo);
 }
 
 void reshape(int x, int y) {

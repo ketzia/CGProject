@@ -13,11 +13,12 @@
 #include "color.h"
 #include "vectors.h"
 #include "rectangle.h"
+#include "glm.h"
 
 class PlayerNPC {
     
 public:
-    PlayerNPC(float *rotationY, float *speed, Color color);
+    PlayerNPC(float *rotationY, float *speed, Color color, float initalXPosition);
     ~PlayerNPC();
     
     float *rotationY;
@@ -33,5 +34,7 @@ public:
     void draw();
     void recalculateRotationMatrix(float angle);
     vector3 calculateDirection();
+    
+    GLMmodel* model;
 };
 

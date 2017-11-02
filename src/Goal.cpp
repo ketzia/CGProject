@@ -2,7 +2,7 @@
 #include "glm.h"
 
 Goal::Goal(float positionX, float positionY, float positionZ, float rotationY) {
-    model = glmReadOBJ("/Users/ernesto/Desktop/goal.obj");
+    model = glmReadOBJ("/Users/ernesto/Code/Graficas Computacionales/Models/goal.obj");
     //glmVertexNormals(model, 45.0f, false);
     //glmFacetNormals(model);
     //glmScale(model, 2.0f);
