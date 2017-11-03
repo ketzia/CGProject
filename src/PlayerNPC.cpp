@@ -9,8 +9,10 @@
 #include <stdio.h>
 #include <math.h>
 #include "glm.h"
+#include "rightRobotLeg.h"
 
 PlayerNPC::PlayerNPC(float *rotationY, float *speed, Color color, float initialXPosition) {
+    
     // Player properties
     this->color = color;
     
@@ -26,12 +28,9 @@ PlayerNPC::PlayerNPC(float *rotationY, float *speed, Color color, float initialX
         this->rotationMatrix[i] = new float[3];
     }
     
-    // Player model
-    //model = glmReadOBJ("/Users/ernesto/Code/Graficas Computacionales/Models/SoldierCut/torso/torso.obj");
-    model = glmReadOBJ("/Users/ernesto/Code/Graficas Computacionales/Models/SoldierCut/torso/torso.obj");
-    glmScale(model,0.01);
-    glmVertexNormals(model, 45.0f, false);
-    glmFacetNormals(model);
+    // Load body parts
+    rightLeg = new RightRobotLeg(initialXPosition, 0, 0 ,0);
+    leftLeg = new LeftRobotLeg(initialXPosition, 0, 0, 0);
 }
 
 void PlayerNPC::draw() {
@@ -46,10 +45,9 @@ void PlayerNPC::draw() {
         
         glTranslatef(position.x, position.y, position.z);
         glRotatef(*rotationY, 0, 1, 0);
-        glutWireTeapot(0.3);
-        
-        glmDraw(model, GLM_SMOOTH);
-        
+        //glutWireTeapot(0.3);
+        rightLeg->draw();
+        leftLeg->draw();
     
     }glPopMatrix();
     glColor3f(1, 1, 1);
@@ -83,3 +81,7 @@ vector3 PlayerNPC::calculateDirection() {
     return newDirection;
 }
 
+void PlayerNPC::animate() {
+    rightLeg->animate();
+    leftLeg->animate();
+}

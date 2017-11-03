@@ -14,6 +14,8 @@
 #include "vectors.h"
 #include "rectangle.h"
 #include "glm.h"
+#include "rightRobotLeg.h"
+#include "leftRobotLeg.h"
 
 class PlayerNPC {
     
@@ -31,10 +33,20 @@ public:
     
     float** rotationMatrix;
     
+    // Draw each component separately
     void draw();
+    
+    // Recalculates the rotation matrix given an angle
     void recalculateRotationMatrix(float angle);
+    
+    // calls the animate method of each body part
+    void animate();
+    
+    // Recalculates direction the model is facing
     vector3 calculateDirection();
     
-    GLMmodel* model;
+    // Reference to all body parts
+    RightRobotLeg* rightLeg;
+    LeftRobotLeg* leftLeg;
 };
 

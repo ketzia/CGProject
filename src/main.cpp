@@ -2,11 +2,7 @@
 * Ketzia Lizette Dante-Hidalgo Bouchot A01336592
 * Ernesto Perez Martinez A01214919
 *
- * Disclaimer: Some times both players share the same rotations and positions, we havent found the cause for this issue but we are
- working on it, if it happens just restart the app until all characters can move independently
- It seems this bug dissapears when rotating the players FIRST and then moving them, If you try to move them first its going to break
- 
- To move the camera, hold the right mouse button and move the mouse right or left. You can play with the radius variable to make it move wider or shorter.
+ * Disclaimer: Bug fixed! it was the array of booleans that was checking the pressed keys -.-
  
  Keys for player one: WASD
  Keys for player two: IJKL
@@ -74,7 +70,7 @@ void init() {
     
     
     // Array to store all keys pressed so far
-    pressedKeys = new bool[256];
+    pressedKeys = new bool[256]();
     
     // Set up initial values for the camera, it is going to be turned in a radius of 9.0
     deltaMov = 0.0f;
@@ -121,7 +117,8 @@ void init() {
 
 void keyPressed(unsigned char key, int x, int y) {
     pressedKeys[key] = true;
-    printf("Pressed key %c", key );
+   
+    
     if(pressedKeys['w']) {
         speedPlayerOne = 0.05f;
     }
@@ -170,10 +167,7 @@ void keyUp(unsigned char key, int x, int y){
 void OnMouseDown(int button, int state, int x, int y) {
     if (button == GLUT_RIGHT_BUTTON) {
         if (state == GLUT_UP) {
-            //angle += deltaAngle;
             isCameraMoving = -1;
-            //worldRotation += 5.0f;
-            //printf("moving something lol /n");
         } else  {
             isCameraMoving = x;
         }
@@ -188,15 +182,8 @@ void OnMouseMove(int x, int y) {
 
 void display() {
     
-  
-
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
-    //gluLookAt(x, 1.0, z,
-      //        x+lx, 1.0, z+lz,
-        //      0.0, 1.0, 0.0);
-    
-    //gluLookAt(<#GLdouble eyeX#>, <#GLdouble eyeY#>, <#GLdouble eyeZ#>, <#GLdouble centerX#>, <#GLdouble centerY#>, <#GLdouble centerZ#>, <#GLdouble upX#>, <#GLdouble upY#>, <#GLdouble upZ#>)
 
     gluLookAt(radius * cos(toRadians(worldRotation)), 3 ,radius * sin(toRadians(worldRotation)),
               0, 0.2, 0,
@@ -221,6 +208,11 @@ void display() {
 
 void idle() {
 	glutPostRedisplay();
+    
+    if(speedPlayerOne > 0) {
+        player_one->animate();
+    }
+   
     //glEnable(GL_NORMALIZE);
     //worldRotation += 0.1f;
     //printf("Speed player one: %f \n", speedPlayerOne);
