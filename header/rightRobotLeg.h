@@ -24,9 +24,14 @@ public:
     float positionX, positionY, positionZ, rotationY;
     
 private:
-    GLfloat* mat_specular;
-    GLfloat* mat_diffuse;
-    GLfloat* mat_shininess;
+    
+    GLfloat* lowerLeg_mat_specular;
+    GLfloat* lowerLeg_mat_diffuse;
+    GLfloat* lowerLeg_mat_shininess;
+    
+    GLfloat* upperLeg_mat_specular;
+    GLfloat* upperLeg_mat_diffuse;
+    GLfloat* upperLeg_mat_shininess;
     
     // LowerLeg aniamtion values
     float lowerLegHeight;

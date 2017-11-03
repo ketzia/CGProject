@@ -100,7 +100,8 @@ void init() {
     glEnable(GL_DEPTH_TEST);
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
     glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
-    glClearColor(DEEPSKYBLUE.r, DEEPSKYBLUE.g, DEEPSKYBLUE.b, 1.0);
+    //glClearColor(DEEPSKYBLUE.r, DEEPSKYBLUE.g, DEEPSKYBLUE.b, 1.0);
+    glClearColor(0.2, 0.2, 0.2, 1.0);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     
@@ -209,9 +210,11 @@ void display() {
 void idle() {
 	glutPostRedisplay();
     
-    if(speedPlayerOne > 0) {
-        player_one->animate();
-    }
+    player_one->animate();
+
+    
+    
+    
    
     //glEnable(GL_NORMALIZE);
     //worldRotation += 0.1f;
