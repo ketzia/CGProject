@@ -16,6 +16,7 @@
 #include "glm.h"
 #include "rightRobotLeg.h"
 #include "leftRobotLeg.h"
+#include "robotBody.h"
 
 class PlayerNPC {
     
@@ -48,5 +49,7 @@ public:
     // Reference to all body parts
     RightRobotLeg* rightLeg;
     LeftRobotLeg* leftLeg;
+    RobotBody* robotBody;
+
 };
 

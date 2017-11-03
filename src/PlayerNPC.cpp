@@ -29,8 +29,9 @@ PlayerNPC::PlayerNPC(float *rotationY, float *speed, Color color, float initialX
     }
     
     // Load body parts
-    rightLeg = new RightRobotLeg(initialXPosition, 0, 0 ,0);
-    leftLeg = new LeftRobotLeg(initialXPosition, 0, 0, 0);
+    rightLeg = new RightRobotLeg();
+    leftLeg = new LeftRobotLeg();
+    robotBody = new RobotBody();
 }
 
 void PlayerNPC::draw() {
@@ -48,6 +49,7 @@ void PlayerNPC::draw() {
         //glutWireTeapot(0.3);
         rightLeg->draw();
         leftLeg->draw();
+        robotBody->draw();
     
     }glPopMatrix();
     glColor3f(1, 1, 1);
@@ -82,6 +84,6 @@ vector3 PlayerNPC::calculateDirection() {
 }
 
 void PlayerNPC::animate() {
-    rightLeg->animate();
-    leftLeg->animate();
+    //rightLeg->animate();
+    //leftLeg->animate();
 }

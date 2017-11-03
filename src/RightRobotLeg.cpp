@@ -1,7 +1,7 @@
 #include "rightRobotLeg.h"
 #include "glm.h"
 
-RightRobotLeg::RightRobotLeg(float positionX, float positionY, float positionZ, float rotationY) {
+RightRobotLeg::RightRobotLeg() {
     lowerLeg = glmReadOBJ("/Users/ernesto/Code/Graficas Computacionales/Models/SoldierCut/pie_L/pie_L.obj");
     upperLeg = glmReadOBJ("/Users/ernesto/Code/Graficas Computacionales/Models/SoldierCut/upperLeg_L/upperLeg_L.obj");
     
@@ -14,11 +14,6 @@ RightRobotLeg::RightRobotLeg(float positionX, float positionY, float positionZ, 
     glmScale(lowerLeg, 0.01);
     glmScale(upperLeg, 0.01);
 
-    this->positionX = positionX;
-    this->positionY = positionY;
-    this->positionZ = positionZ;
-    this->rotationY = rotationY;
-    
     upperLegAngle = 0;
     upperLegBounce = true;
     
@@ -68,9 +63,9 @@ void RightRobotLeg::draw() {
         // Lower Leg
         glPushMatrix();{
             glTranslatef(0, lowerLegHeight, 0);
-            glMaterialfv( GL_FRONT,     GL_DIFFUSE,   lowerLeg_mat_diffuse        );
-            glMaterialfv( GL_FRONT,  GL_SPECULAR,  lowerLeg_mat_specular    );
-            glMaterialfv( GL_FRONT,  GL_SHININESS, lowerLeg_mat_shininess    );
+            glMaterialfv( GL_FRONT,     GL_DIFFUSE,   upperLeg_mat_diffuse        );
+            glMaterialfv( GL_FRONT,  GL_SPECULAR,  upperLeg_mat_specular    );
+            glMaterialfv( GL_FRONT,  GL_SHININESS, upperLeg_mat_shininess    );
             glmDraw(lowerLeg, GLM_SMOOTH);
         }glPopMatrix();
         
@@ -82,9 +77,9 @@ void RightRobotLeg::draw() {
             // Animation
             glPushMatrix(); {
                 glRotatef(upperLegAngle, 1, 0, 0);
-                glMaterialfv( GL_FRONT,     GL_DIFFUSE,   upperLeg_mat_diffuse        );
-                glMaterialfv( GL_FRONT,  GL_SPECULAR,  upperLeg_mat_specular    );
-                glMaterialfv( GL_FRONT,  GL_SHININESS, upperLeg_mat_shininess    );
+                glMaterialfv( GL_FRONT,     GL_DIFFUSE,   lowerLeg_mat_diffuse        );
+                glMaterialfv( GL_FRONT,  GL_SPECULAR,  lowerLeg_mat_specular    );
+                glMaterialfv( GL_FRONT,  GL_SHININESS, lowerLeg_mat_shininess    );
                 glmDraw(upperLeg, GLM_SMOOTH);
             }glPopMatrix();
         }glPopMatrix();

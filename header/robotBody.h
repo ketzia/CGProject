@@ -12,24 +12,20 @@
 
 #include "glm.h"
 
-class LeftRobotLeg {
+class RobotBody {
     
 public:
-    LeftRobotLeg();
-    ~LeftRobotLeg();
+    RobotBody();
+    ~RobotBody();
     void draw();
     void animate();
-    GLMmodel* lowerLeg;
-    GLMmodel* upperLeg;
+    GLMmodel* torso;
     
 private:
-    GLfloat* lowerLeg_mat_specular;
-    GLfloat* lowerLeg_mat_diffuse;
-    GLfloat* lowerLeg_mat_shininess;
     
-    GLfloat* upperLeg_mat_specular;
-    GLfloat* upperLeg_mat_diffuse;
-    GLfloat* upperLeg_mat_shininess;
+    GLfloat* torso_mat_specular;
+    GLfloat* torso_mat_diffuse;
+    GLfloat* torso_mat_shininess;
     
     // LowerLeg aniamtion values
     float lowerLegHeight;
@@ -39,5 +35,6 @@ private:
     float upperLegAngle;
     bool upperLegBounce;
 };
+
 
 

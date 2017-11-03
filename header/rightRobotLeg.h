@@ -15,13 +15,12 @@
 class RightRobotLeg {
     
 public:
-    RightRobotLeg(float positionX, float positionY, float positionZ, float rotationY);
+    RightRobotLeg();
     ~RightRobotLeg();
     void draw();
     void animate();
     GLMmodel* lowerLeg;
     GLMmodel* upperLeg;
-    float positionX, positionY, positionZ, rotationY;
     
 private:
     

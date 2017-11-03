@@ -117,6 +117,7 @@ void init() {
 
 
 void keyPressed(unsigned char key, int x, int y) {
+   
     pressedKeys[key] = true;
    
     
@@ -211,11 +212,8 @@ void idle() {
 	glutPostRedisplay();
     
     player_one->animate();
-
+    player_two->animate();
     
-    
-    
-   
     //glEnable(GL_NORMALIZE);
     //worldRotation += 0.1f;
     //printf("Speed player one: %f \n", speedPlayerOne);
