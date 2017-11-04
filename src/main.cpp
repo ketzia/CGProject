@@ -211,7 +211,10 @@ void display() {
 void idle() {
 	glutPostRedisplay();
     
-    player_one->animate();
+    if(speedPlayerOne > 0) {
+        player_one->animate();
+    }
+    
     player_two->animate();
     
     //glEnable(GL_NORMALIZE);
@@ -233,7 +236,7 @@ void reshape(int x, int y) {
 int main(int argc, char* argv[]) {
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_DEPTH | GLUT_RGB);
-	glutInitWindowSize(800, 800);
+	glutInitWindowSize(1200, 800);
 	glutCreateWindow(argv[0]);
 
 	init();

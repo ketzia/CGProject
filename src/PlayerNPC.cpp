@@ -84,6 +84,6 @@ vector3 PlayerNPC::calculateDirection() {
 }
 
 void PlayerNPC::animate() {
-    //rightLeg->animate();
+    rightLeg->animate();
     //leftLeg->animate();
 }

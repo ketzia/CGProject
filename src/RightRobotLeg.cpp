@@ -17,7 +17,7 @@ RightRobotLeg::RightRobotLeg() {
     upperLegAngle = 0;
     upperLegBounce = true;
     
-    lowerLegHeight = 0;
+    lowerLegHeight = -60;
     lowerLegBounce = true;
     
     /** Lower Leg Materials  **/
@@ -55,6 +55,37 @@ RightRobotLeg::RightRobotLeg() {
 
 void RightRobotLeg::draw() {
     
+    
+    glPushMatrix();{
+        glTranslatef(0, 0, 0);
+        glRotatef(-90, 0, 1, 0);
+        
+        glPushMatrix(); {
+            // First translate the leg
+            glTranslatef(0.1, 0.50, 0);
+            
+            glTranslatef(0.1, 0.50, 0);
+            glRotatef(upperLegAngle, 1, 0, 0);
+            glTranslatef(-0.1, -0.50, 0);
+            glMaterialfv( GL_FRONT,     GL_DIFFUSE,   lowerLeg_mat_diffuse        );
+            glMaterialfv( GL_FRONT,  GL_SPECULAR,  lowerLeg_mat_specular    );
+            glMaterialfv( GL_FRONT,  GL_SHININESS, lowerLeg_mat_shininess    );
+            glmDraw(upperLeg, GLM_SMOOTH);
+            
+            // Lower Leg
+            glPushMatrix(); {
+                glRotatef(lowerLegHeight, 1, 0, 0);
+                glTranslatef(-0.1, -0.50, 0);
+               
+                glMaterialfv( GL_FRONT,     GL_DIFFUSE,upperLeg_mat_diffuse        );
+                glMaterialfv( GL_FRONT,  GL_SPECULAR,  upperLeg_mat_specular    );
+                glMaterialfv( GL_FRONT,  GL_SHININESS, upperLeg_mat_shininess    );
+                glmDraw(lowerLeg, GLM_SMOOTH);
+            }glPopMatrix();
+        }glPopMatrix();
+        
+    }glPopMatrix();
+    /*
     glPushMatrix(); {
         // Locate Object
         glTranslatef(0, 0, 0);
@@ -84,19 +115,20 @@ void RightRobotLeg::draw() {
             }glPopMatrix();
         }glPopMatrix();
     }glPopMatrix();
+     */
     
    
 }
 
 void RightRobotLeg::animate() {
-    upperLegAngle += upperLegBounce ? 3.1 : -3.1;
-    lowerLegHeight += lowerLegBounce ? 0.01 : -0.01;
+    upperLegAngle += upperLegBounce ? 3 : -3;
+    lowerLegHeight += lowerLegBounce ? 3 : -3;
     
-    if(upperLegAngle >= 90 || upperLegAngle <= 0) {
+    if(upperLegAngle >= 50 || upperLegAngle <= 0) {
         upperLegBounce = !upperLegBounce;
     }
     
-    if(lowerLegHeight >= 0.3 || lowerLegHeight <= 0) {
+    if(lowerLegHeight >= 0 || lowerLegHeight <= -60) {
         lowerLegBounce = !lowerLegBounce;
     }
 }

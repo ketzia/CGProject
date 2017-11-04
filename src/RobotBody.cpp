@@ -5,9 +5,7 @@ RobotBody::RobotBody() {
     torso = glmReadOBJ("/Users/ernesto/Code/Graficas Computacionales/Models/SoldierCut/torso/torso.obj");
     
     glmVertexNormals(torso, 45.0f, false);
-    
     glmFacetNormals(torso);
-    
     glmScale(torso, 0.01);
     
     upperLegAngle = 0;
