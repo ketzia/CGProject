@@ -14,10 +14,10 @@ LeftRobotLeg::LeftRobotLeg() {
     glmScale(lowerLeg, 0.01);
     glmScale(upperLeg, 0.01);
     
-    upperLegAngle = 30;
+    upperLegAngle = 50;
     upperLegBounce = false;
     
-    lowerLegHeight = 30;
+    lowerLegHeight = 0;
     lowerLegBounce = false;
     
     /** Lower Leg Materials  **/
@@ -73,7 +73,7 @@ void LeftRobotLeg::draw() {
             
             // Lower Leg
             glPushMatrix(); {
-                glRotatef(-lowerLegHeight, 1, 0, 0);
+                glRotatef(lowerLegHeight, 1, 0, 0);
                 glTranslatef(0.1, -0.50, 0);
                 glMaterialfv( GL_FRONT,     GL_DIFFUSE,   upperLeg_mat_diffuse        );
                 glMaterialfv( GL_FRONT,  GL_SPECULAR,  upperLeg_mat_specular    );
@@ -124,11 +124,11 @@ void LeftRobotLeg::animate() {
     upperLegAngle += upperLegBounce ? 3 : -3;
     lowerLegHeight += lowerLegBounce ? 3 : -3;
     
-    if(upperLegAngle >= 30 || upperLegAngle <= -30) {
+    if(upperLegAngle >= 50 || upperLegAngle <= 0) {
         upperLegBounce = !upperLegBounce;
     }
     
-    if(lowerLegHeight >= 30 || lowerLegHeight <= -30) {
+    if(lowerLegHeight >= 0 || lowerLegHeight <= -60) {
         lowerLegBounce = !lowerLegBounce;
     }
 }
