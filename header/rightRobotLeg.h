@@ -32,8 +32,8 @@ private:
     GLfloat* upperLeg_mat_diffuse;
     GLfloat* upperLeg_mat_shininess;
     
-    // LowerLeg aniamtion values
-    float lowerLegHeight;
+    // LowerLeg animation values
+    float lowerLegAngle;
     bool lowerLegBounce;
     
     // UpperLeg animation values

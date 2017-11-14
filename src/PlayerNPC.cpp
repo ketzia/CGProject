@@ -9,7 +9,7 @@
 #include <stdio.h>
 #include <math.h>
 #include "glm.h"
-#include "rightRobotLeg.h"
+
 
 PlayerNPC::PlayerNPC(float *rotationY, float *speed, Color color, float initialXPosition) {
     
@@ -17,7 +17,7 @@ PlayerNPC::PlayerNPC(float *rotationY, float *speed, Color color, float initialX
     this->color = color;
     
     // Movement properties
-    this->position.x = initialXPosition;this->position.y =0;this->position.z =0;
+    this->position.x = initialXPosition;this->position.y =-1;this->position.z =0;
     this->rotationY = rotationY;
     this->speed = speed;
     this->initialDirection.x = 1;this->initialDirection.y=0;this->initialDirection.z = 0; // Direction is (1,0,0)
@@ -32,6 +32,9 @@ PlayerNPC::PlayerNPC(float *rotationY, float *speed, Color color, float initialX
     rightLeg = new RightRobotLeg();
     leftLeg = new LeftRobotLeg();
     robotBody = new RobotBody();
+    rightArm = new RightRobotArm();
+    leftArm = new LeftRobotArm();
+    head = new RobotHead();
 }
 
 void PlayerNPC::draw() {
@@ -46,10 +49,13 @@ void PlayerNPC::draw() {
         
         glTranslatef(position.x, position.y, position.z);
         glRotatef(*rotationY, 0, 1, 0);
-        //glutWireTeapot(0.3);
+    
         rightLeg->draw();
         leftLeg->draw();
         robotBody->draw();
+        rightArm->draw();
+        leftArm->draw();
+        head->draw();
     
     }glPopMatrix();
     glColor3f(1, 1, 1);
@@ -86,4 +92,6 @@ vector3 PlayerNPC::calculateDirection() {
 void PlayerNPC::animate() {
     rightLeg->animate();
     leftLeg->animate();
+    rightArm->animate();
+    leftArm->animate();
 }

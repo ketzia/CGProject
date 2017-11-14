@@ -14,6 +14,8 @@
 #include "rectangle.h"
 #include "color.h"
 #include "vectors.h"
+#include "glm.h"
+#include "skybox.h"
 
 class SoccerField {
 
@@ -33,6 +35,9 @@ private:
     // Goals are just part of this class
     Goal* goalOne;
     Goal* goalTwo;
+    Skybox* skybox;
+    
+    GLMmodel* soccerField;
     
     vector3 topLeft_b, topRight_b, lowLeft_b, lowRight_b;
     GLfloat* mat_specular;

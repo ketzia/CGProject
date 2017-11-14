@@ -29,8 +29,15 @@
 #include "utils.h"
 
 // Lights
-GLfloat* light0_position;
+GLfloat*    light0_position; //<-------------------------------------Light 0 - location
+GLfloat*    light0_diffuse; //<--------------------------------------Light 0 - diffuse
+GLfloat*    light0_specular; //<-------------------------------------Light 0 - specular
+GLfloat*    light0_ambient; //<--------------------------------------Light 0 - ambient
 
+GLfloat*    light1_position; //<-------------------------------------Light 1 - location
+GLfloat*    light1_diffuse; //<--------------------------------------Light 1 - diffuse
+GLfloat*    light1_specular; //<-------------------------------------Light 1 - specular
+GLfloat*    light1_ambient; //<--------------------------------------Light 1 - ambient//<--------------------------------------Ambiente global
 
 // Objects
 SoccerField* soccerField;
@@ -57,17 +64,84 @@ int isCameraMoving;
 // Array to store all pressed keys
 bool* pressedKeys;
 
-void init() {
-    // Light setup
-    light0_position = new GLfloat[4];
-    light0_position[0] = 3;
-    light0_position[1] = 3;
-    light0_position[2] = 0;
-    light0_position[3] = 1;
-    glLightfv(GL_LIGHT0, GL_POSITION, light0_position);
-    glEnable(GL_LIGHTING);
-    glEnable(GL_LIGHT0);
+void setupLighting() {
+    //->LIGHT 0 begins
+    light0_position        = new GLfloat[4]; //<------------------------Reserve memory
+    light0_position[0]    = 5.0f; //<----------------------------------L0x
+    light0_position[1]    = 1.0f; //<----------------------------------L0y
+    light0_position[2]    = 1.0f; //<----------------------------------L0z
+    light0_position[3]    = 0.0f; //<----------------------------------L0w
     
+    light0_specular        = new GLfloat[4]; //<------------------------Reserve memory
+    light0_specular[0]    = 1.0f; //<----------------------------------L0Sr
+    light0_specular[1]    = 1.0f; //<----------------------------------L0Sg
+    light0_specular[2]    = 1.0f; //<----------------------------------L0Sb
+    light0_specular[3]    = 1.0f; //<----------------------------------L0Sa
+    
+    light0_diffuse        = new GLfloat[4]; //<------------------------Reserve memory
+    light0_diffuse[0]    = 0.16f; //<----------------------------------L0Dr
+    light0_diffuse[1]    = 0.5f; //<----------------------------------L0Dg
+    light0_diffuse[2]    = 0.73f; //<----------------------------------L0Db
+    light0_diffuse[3]    = 1.0f; //<----------------------------------L0Da
+    
+    light0_ambient        = new GLfloat[4]; //<------------------------Reserve memory
+    light0_ambient[0]    = 0.1f; //<----------------------------------L0Ar
+    light0_ambient[1]    = 0.1f; //<----------------------------------L0Ag
+    light0_ambient[2]    = 0.1f; //<----------------------------------L0Ab
+    light0_ambient[3]    = 0.5f; //<----------------------------------L0Aa
+    //<-LIGHT 0 ends
+    
+    //->LIGHT 1 begins
+    light1_position        = new GLfloat[4]; //<------------------------Reserve memory
+    light1_position[0]    = -5.0f; //<---------------------------------L1x
+    light1_position[1]    =  1.0f; //<---------------------------------L1y
+    light1_position[2]    =  1.0f; //<---------------------------------L1z
+    light1_position[3]    =  0.0f; //<---------------------------------L1w
+    
+    light1_specular        = new GLfloat[4]; //<------------------------Reserve memory
+    light1_specular[0]    = 1.0f; //<----------------------------------L1Sr
+    light1_specular[1]    = 1.0f; //<----------------------------------L1Sg
+    light1_specular[2]    = 1.0f; //<----------------------------------L1Sb
+    light1_specular[3]    = 1.0f; //<----------------------------------L1Sa
+    
+    light1_diffuse        = new GLfloat[4]; //<------------------------Reserve memory
+    light1_diffuse[0]    = 0.61f; //<----------------------------------L1Dr
+    light1_diffuse[1]    = 0.35f; //<----------------------------------L1Dg
+    light1_diffuse[2]    = 0.71f; //<----------------------------------L1Db
+    light1_diffuse[3]    = 1.0f; //<----------------------------------L1Da
+    
+    light1_ambient        = new GLfloat[4]; //<------------------------Reserve memory
+    light1_ambient[0]    = 0.1f; //<----------------------------------L1Ar
+    light1_ambient[1]    = 0.1f; //<----------------------------------L1Ag
+    light1_ambient[2]    = 0.1f; //<----------------------------------L1Ab
+    light1_ambient[3]    = 0.5f; //<----------------------------------L1Aa
+    //<-LIGHT 1 ends
+    
+    // Configure LIGHT 0:
+    glLightfv( GL_LIGHT0, GL_POSITION,  light0_position );
+    glLightfv( GL_LIGHT0, GL_AMBIENT,   light0_ambient);
+    glLightfv( GL_LIGHT0, GL_DIFFUSE,   light0_diffuse);
+    glLightfv( GL_LIGHT0, GL_SPECULAR,  light0_specular);
+    // Configure LIGHT 1:
+    glLightfv( GL_LIGHT1, GL_POSITION,  light1_position );
+    glLightfv( GL_LIGHT1, GL_AMBIENT,   light1_ambient);
+    glLightfv( GL_LIGHT1, GL_DIFFUSE,   light1_diffuse);
+    glLightfv( GL_LIGHT1, GL_SPECULAR,  light1_specular);
+    // Enable LIGHT 0:
+    glEnable( GL_LIGHT0 );
+    // Enable LIGHT 1:
+    glEnable( GL_LIGHT1 );
+    // Enable lighting:
+    glEnable( GL_LIGHTING );
+}
+
+
+void init() {
+    glClearColor(0.2, 0.2, 0.2, 1.0);
+    glShadeModel(GL_SMOOTH);
+    setupLighting();
+    // Light setup
+    //glEnable(GL_NORMALIZE);
     
     // Array to store all keys pressed so far
     pressedKeys = new bool[256]();
@@ -96,12 +170,9 @@ void init() {
     speedPlayerTwo = 0;
     
     // OpenGL Code
-    glShadeModel(GL_SMOOTH);
     glEnable(GL_DEPTH_TEST);
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
     glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
-    //glClearColor(DEEPSKYBLUE.r, DEEPSKYBLUE.g, DEEPSKYBLUE.b, 1.0);
-    glClearColor(0.2, 0.2, 0.2, 1.0);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     
@@ -111,7 +182,7 @@ void init() {
     player_one = new PlayerNPC(&(rotationPlayerOne), &(speedPlayerOne), DEEPSKYBLUE, 1);
     player_two = new PlayerNPC(&(rotationPlayerTwo), &(speedPlayerTwo), MONZA, -1);
     
-    glEnable(GL_NORMALIZE);
+    //
 }
 
 
@@ -187,8 +258,9 @@ void display() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
 
+    
     gluLookAt(radius * cos(toRadians(worldRotation)), 3 ,radius * sin(toRadians(worldRotation)),
-              0, 0.2, 0,
+              0, 2, 0,
               0.0, 1.0, 0.0);
     
     // Draw objects
@@ -211,11 +283,16 @@ void display() {
 void idle() {
 	glutPostRedisplay();
     
-    if(speedPlayerOne > 0) {
+    if(speedPlayerOne != 0) {
         player_one->animate();
     }
     
     player_two->animate();
+    //if(speedPlayerTwo != 0)  {
+        //player_two->animate();
+    //}
+    
+    
     
     //glEnable(GL_NORMALIZE);
     //worldRotation += 0.1f;
@@ -226,7 +303,7 @@ void idle() {
 void reshape(int x, int y) {
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(80.0, (GLdouble)x / (GLdouble)y, 0.5, 20.0);
+	gluPerspective(80.0, (GLdouble)x / (GLdouble)y, 0.5, 100.0);
 	glMatrixMode(GL_MODELVIEW);
 	glViewport(0, 0, x, y);
 	gluLookAt(0.0, 3.0, 10.0,0.0, 0.0, 0.0,0.0, 1.0, 0.0);

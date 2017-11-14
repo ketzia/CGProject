@@ -14,9 +14,13 @@
 #include "vectors.h"
 #include "rectangle.h"
 #include "glm.h"
+
 #include "rightRobotLeg.h"
 #include "leftRobotLeg.h"
 #include "robotBody.h"
+#include "rightRobotArm.h"
+#include "leftRobotArm.h"
+#include "robotHead.h"
 
 class PlayerNPC {
     
@@ -50,6 +54,9 @@ public:
     RightRobotLeg* rightLeg;
     LeftRobotLeg* leftLeg;
     RobotBody* robotBody;
+    RightRobotArm* rightArm;
+    LeftRobotArm* leftArm;
+    RobotHead* head;
 
 };
 

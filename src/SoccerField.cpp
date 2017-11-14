@@ -5,10 +5,17 @@ SoccerField::SoccerField(float width, float depth, float posY, Color color) {
     this->color = color;
     field = new Rectangle(0.1,width,depth);
     
+    soccerField = glmReadOBJ("/Users/ernesto/Code/Graficas Computacionales/Models/field2.obj");
+    //soccerField = glmReadOBJ("/Users/ernesto/Desktop/field.obj");
+    //glmVertexNormals(soccerField, 180, false);
+    //glmFacetNormals(soccerField);
+    glmScale(soccerField, 0.8);
+    
     topLeft_b.x = -width;topLeft_b.y = posY;topLeft_b.z = -depth;
     lowLeft_b.x = -width;lowLeft_b.y = posY;lowLeft_b.z = depth;
     goalOne = new Goal(-width/2, posY, -depth/2+1, -90);
     goalTwo = new Goal(width/2, posY, depth/2-1, 90);
+    skybox = new Skybox(50);
     
     mat_specular       = new GLfloat[4]; //<------------------------Asignar memoria
     mat_specular[0]    = 1.0f; //<----------------------------------S0r
@@ -30,19 +37,21 @@ void SoccerField::draw() {
     
     // Draw soccer field
     glPushMatrix();{
-        glMaterialfv( GL_FRONT,     GL_DIFFUSE,   mat_diffuse        );
-        glMaterialfv( GL_FRONT,  GL_SPECULAR,  mat_specular    );
-        glMaterialfv( GL_FRONT,  GL_SHININESS, mat_shininess    );
+        //glMaterialfv( GL_FRONT,     GL_DIFFUSE,   mat_diffuse        );
+        //glMaterialfv( GL_FRONT,  GL_SPECULAR,  mat_specular    );
+        //glMaterialfv( GL_FRONT,  GL_SHININESS, mat_shininess    );
         glTranslatef(0, posY, 0);
-        field->draw();
+        //field->draw();
+        glmDraw(soccerField,GLM_SMOOTH|GLM_TEXTURE|GLM_MATERIAL);
     }glPopMatrix();
    
     glPushMatrix(); {
-        goalOne->draw();
+        //goalOne->draw();
+        skybox->draw();
     }glPopMatrix();
     
     glPushMatrix();{
-        goalTwo->draw();
+        //goalTwo->draw();
     }glPopMatrix();
     
 }

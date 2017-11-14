@@ -14,9 +14,13 @@ void Rectangle::draw() {
         
         // Lower Square
         glBegin(GL_QUADS);
+            glNormal3f(0, 1, 0);
             glVertex3f(-width/2, 0, depth/2);
+            glNormal3f(0, 1, 0);
             glVertex3f(width/2, 0, depth/2);
+            glNormal3f(0, 1, 0);
             glVertex3f(width/2, 0, -depth/2);
+            glNormal3f(0, 1, 0);
             glVertex3f(-width/2, 0, -depth/2);
         glEnd();
         /*

@@ -17,7 +17,7 @@ RightRobotLeg::RightRobotLeg() {
     upperLegAngle = 0;
     upperLegBounce = true;
     
-    lowerLegHeight = -60;
+    lowerLegAngle = -60;
     lowerLegBounce = true;
     
     /** Lower Leg Materials  **/
@@ -74,7 +74,7 @@ void RightRobotLeg::draw() {
             
             // Lower Leg
             glPushMatrix(); {
-                glRotatef(lowerLegHeight, 1, 0, 0);
+                glRotatef(lowerLegAngle, 1, 0, 0);
                 glTranslatef(-0.1, -0.50, 0);
                
                 glMaterialfv( GL_FRONT,     GL_DIFFUSE,upperLeg_mat_diffuse        );
@@ -122,13 +122,13 @@ void RightRobotLeg::draw() {
 
 void RightRobotLeg::animate() {
     upperLegAngle += upperLegBounce ? 3 : -3;
-    lowerLegHeight += lowerLegBounce ? 3 : -3;
+    lowerLegAngle += lowerLegBounce ? 3 : -3;
     
     if(upperLegAngle >= 50 || upperLegAngle <= 0) {
         upperLegBounce = !upperLegBounce;
     }
     
-    if(lowerLegHeight >= 0 || lowerLegHeight <= -60) {
+    if(lowerLegAngle >= 0 || lowerLegAngle <= -60) {
         lowerLegBounce = !lowerLegBounce;
     }
 }
