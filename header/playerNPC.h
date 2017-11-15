@@ -35,6 +35,7 @@ public:
     
     vector3 position;
     vector3 initialDirection;
+    vector3 directionVector;
     
     float** rotationMatrix;
     
@@ -49,6 +50,9 @@ public:
     
     // Recalculates direction the model is facing
     vector3 calculateDirection();
+    
+    // Collision radius to calcualte collisions with ball
+    float collisionRadius;
     
     // Reference to all body parts
     RightRobotLeg* rightLeg;
