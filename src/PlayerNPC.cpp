@@ -35,6 +35,8 @@ PlayerNPC::PlayerNPC(float *rotationY, float *speed, Color color, float initialX
     rightArm = new RightRobotArm();
     leftArm = new LeftRobotArm();
     head = new RobotHead();
+    
+    collisionRadius = 0.9f;
 }
 
 void PlayerNPC::draw() {
@@ -42,7 +44,7 @@ void PlayerNPC::draw() {
         
         glColor3f(color.r, color.g, color.b);
         recalculateRotationMatrix(*rotationY);
-        vector3 directionVector = calculateDirection();
+        directionVector = calculateDirection();
         position.x += directionVector.x * (*(float*)speed);
         position.y += directionVector.y * (*(float*)speed);
         position.z += directionVector.z * (*(float*)speed);
@@ -57,6 +59,8 @@ void PlayerNPC::draw() {
         leftArm->draw();
         head->draw();
     
+        //glutWireSphere(collisionRadius, 10, 10);
+        
     }glPopMatrix();
     glColor3f(1, 1, 1);
     

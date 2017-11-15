@@ -54,6 +54,7 @@ float speedPlayerOne;
 float speedPlayerTwo;
 float rotationPlayerOne;
 float rotationPlayerTwo;
+float ballSpeed;
 
 // Definitions for the camera
 float radius;
@@ -63,6 +64,9 @@ int isCameraMoving;
 
 // Array to store all pressed keys
 bool* pressedKeys;
+
+bool playerOneHasBall;
+bool playerTwoHasBall;
 
 void setupLighting() {
     //->LIGHT 0 begins
@@ -159,7 +163,7 @@ void init() {
     Color MONZA;MONZA.r = 0.81;MONZA.g = 0.0;MONZA.b = 0.06;
     
     // Positions
-    ballPosition.x = 0.0;ballPosition.y = 0;ballPosition.z =0;
+    ballPosition.x = 0.0;ballPosition.y = -0.8;ballPosition.z =0;
     
     // Character rotations
     rotationPlayerOne = 45;
@@ -168,6 +172,12 @@ void init() {
     // Character speeds
     speedPlayerOne = 0;
     speedPlayerTwo = 0;
+    ballSpeed = 0.0f;
+    
+    // Helper flags for ball logic
+    playerOneHasBall = false;
+    playerTwoHasBall = false;
+    
     
     // OpenGL Code
     glEnable(GL_DEPTH_TEST);
@@ -178,13 +188,11 @@ void init() {
     
     // Instantiate all Characters, this is going to be changed for models in the future
     soccerField = new SoccerField(14, 28, -1, GRASS_GREEN);
-    ball = new SoccerBall(0.1,&(ballPosition),RED);
     player_one = new PlayerNPC(&(rotationPlayerOne), &(speedPlayerOne), DEEPSKYBLUE, 1);
     player_two = new PlayerNPC(&(rotationPlayerTwo), &(speedPlayerTwo), MONZA, -1);
     
-    //
+    ball = new SoccerBall(&(ballSpeed));
 }
-
 
 
 void keyPressed(unsigned char key, int x, int y) {
@@ -218,6 +226,27 @@ void keyPressed(unsigned char key, int x, int y) {
         rotationPlayerTwo -= 18;
     }
     
+    if(pressedKeys['q']) {
+        if(playerOneHasBall){
+            // Do logic to send ball flying forward
+            //ball->setDirectionVector();
+            //ball->dettachPlayer();
+            ball->setDirectionVector();
+            ball->isMoving = true;
+            ballSpeed = 0.2f;
+        }
+    }
+    
+    if(pressedKeys['u']) {
+        if(playerTwoHasBall){
+            //ball->dettachPlayer();
+            ball->setDirectionVector();
+            ball->isMoving = true;
+            ballSpeed = 0.2f;
+            // Do logic to send ball flying forward too
+        }
+    }
+    
 }
 
 void keyUp(unsigned char key, int x, int y){
@@ -246,6 +275,7 @@ void OnMouseDown(int button, int state, int x, int y) {
         }
     }
 }
+
 void OnMouseMove(int x, int y) {
     if (isCameraMoving >= 0) {
         deltaMov = (x - isCameraMoving) * 0.01f;
@@ -253,12 +283,24 @@ void OnMouseMove(int x, int y) {
     }
 }
 
+void checkCollisions() {
+    if(ball->inCollisionWithPlayer(player_one) && !ball->isMoving) {
+        ball->setPosition(player_one->position.x, player_one->position.z);
+        playerOneHasBall = true;
+        playerTwoHasBall = false;
+    }
+    
+    if(ball->inCollisionWithPlayer(player_two) && !ball->isMoving){
+        ball->setPosition(player_two->position.x, player_two->position.z);
+        playerTwoHasBall = true;
+        playerOneHasBall = false;
+    }
+}
+
 void display() {
     
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
-
-    
     gluLookAt(radius * cos(toRadians(worldRotation)), 3 ,radius * sin(toRadians(worldRotation)),
               0, 2, 0,
               0.0, 1.0, 0.0);
@@ -277,8 +319,10 @@ void display() {
         player_two->draw();
     }glPopMatrix();
 
+    checkCollisions();
 	glutSwapBuffers();
 }
+
 
 void idle() {
 	glutPostRedisplay();
@@ -287,12 +331,25 @@ void idle() {
         player_one->animate();
     }
     
-    player_two->animate();
-    //if(speedPlayerTwo != 0)  {
-        //player_two->animate();
+    if(speedPlayerTwo != 0)  {
+        player_two->animate();
+    }
+    
+    if(ballSpeed < 0) {
+        ballSpeed = 0;
+    }else if(ballSpeed == 0) {
+        ball->isMoving=false;
+    }else if(ballSpeed > 0){
+        ballSpeed -= 0.001f;
+    }
+    
+    //if(ballSpeed < 0) {
+        //ballSpeed = 0;
     //}
     
-    
+    //if(ballSpeed > 0) {
+        //ballSpeed -= 0.1f;
+    //}
     
     //glEnable(GL_NORMALIZE);
     //worldRotation += 0.1f;
