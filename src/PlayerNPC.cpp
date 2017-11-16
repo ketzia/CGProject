@@ -11,10 +11,10 @@
 #include "glm.h"
 
 
-PlayerNPC::PlayerNPC(float *rotationY, float *speed, Color color, float initialXPosition) {
+PlayerNPC::PlayerNPC(float *rotationY, float *speed, Color mainColor, float initialXPosition) {
     
     // Player properties
-    this->color = color;
+    this->mainColor = mainColor;
     
     // Movement properties
     this->position.x = initialXPosition;this->position.y =-1;this->position.z =0;
@@ -39,10 +39,28 @@ PlayerNPC::PlayerNPC(float *rotationY, float *speed, Color color, float initialX
     collisionRadius = 0.9f;
 }
 
+void PlayerNPC::checkFieldBoundaries() {
+    if(position.x > 12) {
+        position.x = 12;
+    }
+    
+    if(position.x < -12) {
+        position.x = -12;
+    }
+    
+    if(position.z > 24) {
+        position.z = 24;
+    }
+    
+    if(position.z < -24) {
+        position.z = -24;
+    }
+}
+
 void PlayerNPC::draw() {
     glPushMatrix();{
         
-        glColor3f(color.r, color.g, color.b);
+        glColor3f(mainColor.r, mainColor.g, mainColor.b);
         recalculateRotationMatrix(*rotationY);
         directionVector = calculateDirection();
         position.x += directionVector.x * (*(float*)speed);
@@ -51,7 +69,8 @@ void PlayerNPC::draw() {
         
         glTranslatef(position.x, position.y, position.z);
         glRotatef(*rotationY, 0, 1, 0);
-    
+        checkFieldBoundaries();
+        
         rightLeg->draw();
         leftLeg->draw();
         robotBody->draw();

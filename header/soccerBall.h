@@ -16,6 +16,7 @@
 #include "color.h"
 #include "vectors.h"
 #include "playerNPC.h"
+#include "goal.h"
 
 class SoccerBall {
     
@@ -26,12 +27,16 @@ public:
     vector3 directionVector;
     
     float * speed;
-    void draw();
+    
     float radius;
     bool isMoving;
     PlayerNPC* attachedPlayer;
     
+    void draw();
+    // Checks if the position of this object is past the boundaries of the soccerfield
+    void checkFieldBoundaries();
     bool inCollisionWithPlayer(PlayerNPC* player);
+    bool inCollisionWithGoal(Goal* goal);
     void setPosition(float x, float z);
     void setDirectionVector();
 };

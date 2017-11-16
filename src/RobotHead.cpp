@@ -10,17 +10,17 @@ RobotHead::RobotHead() {
     glmScale(head, 0.01);
    
     /** Lower Leg Materials  **/
-    head_mat_specular       = new GLfloat[4]; //<------------------------Asignar memoria
-    head_mat_specular[0]    = 1.0f; //<----------------------------------S0r
-    head_mat_specular[1]    = 1.0f; //<----------------------------------S0g
-    head_mat_specular[2]    = 1.0f; //<----------------------------------S0b
-    head_mat_specular[3]    = 1.0f; //<----------------------------------S0a
+    head_mat_specular       = new GLfloat[4];
+    head_mat_specular[0]    = 1.0f;
+    head_mat_specular[1]    = 1.0f;
+    head_mat_specular[2]    = 1.0f;
+    head_mat_specular[3]    = 1.0f;
     
-    head_mat_diffuse        = new GLfloat[4]; //<------------------------Asignar memoria
-    head_mat_diffuse[0]     = 0.0f; //<----------------------------------D0r
-    head_mat_diffuse[1]     = 0.0f; //<----------------------------------D0g
-    head_mat_diffuse[2]     = 0.0f; //<----------------------------------D0b
-    head_mat_diffuse[3]     = 1.0f; //<----------------------------------D0a
+    head_mat_diffuse        = new GLfloat[4];
+    head_mat_diffuse[0]     = 0.0f;
+    head_mat_diffuse[1]     = 0.0f;
+    head_mat_diffuse[2]     = 0.0f;
+    head_mat_diffuse[3]     = 1.0f;
     
     head_mat_shininess      = new GLfloat[1]; //<------------------------Asignar memoria
     head_mat_shininess[0]   = 60.0f; //<---------------------------------Exponente especular del material 0

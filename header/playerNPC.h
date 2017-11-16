@@ -25,13 +25,13 @@
 class PlayerNPC {
     
 public:
-    PlayerNPC(float *rotationY, float *speed, Color color, float initalXPosition);
+    PlayerNPC(float *rotationY, float *speed, Color mainColor, float initalXPosition);
     ~PlayerNPC();
     
     float *rotationY;
     float *speed;
     
-    Color color;
+    Color mainColor;
     
     vector3 position;
     vector3 initialDirection;
@@ -41,6 +41,9 @@ public:
     
     // Draw each component separately
     void draw();
+    
+    // Checks if the position of this object is past the boundaries of the soccerfield
+    void checkFieldBoundaries();
     
     // Recalculates the rotation matrix given an angle
     void recalculateRotationMatrix(float angle);

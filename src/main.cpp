@@ -27,6 +27,7 @@
 #include <stdio.h>
 #include "playerNPC.h"
 #include "utils.h"
+#include "ambientProps.h"
 
 // Lights
 GLfloat*    light0_position; //<-------------------------------------Light 0 - location
@@ -45,6 +46,9 @@ Rectangle* rectangle;
 SoccerBall* ball;
 PlayerNPC* player_one;
 PlayerNPC* player_two;
+AmbientProps* ambientProps;
+Goal* playerOneGoal;
+Goal* playerTwoGoal;
 
 // Position of the ball to be used later
 vector3 ballPosition;
@@ -72,7 +76,7 @@ void setupLighting() {
     //->LIGHT 0 begins
     light0_position        = new GLfloat[4]; //<------------------------Reserve memory
     light0_position[0]    = 5.0f; //<----------------------------------L0x
-    light0_position[1]    = 1.0f; //<----------------------------------L0y
+    light0_position[1]    = 15.0f; //<----------------------------------L0y
     light0_position[2]    = 1.0f; //<----------------------------------L0z
     light0_position[3]    = 0.0f; //<----------------------------------L0w
     
@@ -161,6 +165,8 @@ void init() {
     Color RED;RED.r = 1.0;RED.g = 0.0;RED.b=0.0;
     Color DEEPSKYBLUE;DEEPSKYBLUE.r = 0.0;DEEPSKYBLUE.g = 0.75; DEEPSKYBLUE.b = 1.0;
     Color MONZA;MONZA.r = 0.81;MONZA.g = 0.0;MONZA.b = 0.06;
+    Color GOLD;GOLD.r = 0.83f;GOLD.g = 0.69f;GOLD.b = 1.0f;
+    
     
     // Positions
     ballPosition.x = 0.0;ballPosition.y = -0.8;ballPosition.z =0;
@@ -178,7 +184,6 @@ void init() {
     playerOneHasBall = false;
     playerTwoHasBall = false;
     
-    
     // OpenGL Code
     glEnable(GL_DEPTH_TEST);
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
@@ -188,23 +193,25 @@ void init() {
     
     // Instantiate all Characters, this is going to be changed for models in the future
     soccerField = new SoccerField(14, 28, -1, GRASS_GREEN);
-    player_one = new PlayerNPC(&(rotationPlayerOne), &(speedPlayerOne), DEEPSKYBLUE, 1);
+    ambientProps = new AmbientProps();
+    player_one = new PlayerNPC(&(rotationPlayerOne), &(speedPlayerOne), GOLD, 1);
     player_two = new PlayerNPC(&(rotationPlayerTwo), &(speedPlayerTwo), MONZA, -1);
-    
     ball = new SoccerBall(&(ballSpeed));
+    playerOneGoal = new Goal(2.2, -0.2, 23);
+    playerTwoGoal = new Goal(2.2, -0.2, -23);
+
 }
 
 
 void keyPressed(unsigned char key, int x, int y) {
    
     pressedKeys[key] = true;
-   
     
     if(pressedKeys['w']) {
-        speedPlayerOne = 0.05f;
+        speedPlayerOne = 0.07f;
     }
     if(pressedKeys['s']) {
-        speedPlayerOne = -0.05f;
+        speedPlayerOne = -0.07f;
     }
     if(pressedKeys['a']) {
         rotationPlayerOne += 18;
@@ -214,10 +221,10 @@ void keyPressed(unsigned char key, int x, int y) {
     }
     
     if(pressedKeys['i']) {
-        speedPlayerTwo = 0.05f;
+        speedPlayerTwo = 0.07f;
     }
     if(pressedKeys['k']) {
-        speedPlayerTwo = -0.05f;
+        speedPlayerTwo = -0.07f;
     }
     if(pressedKeys['j']) {
         rotationPlayerTwo += 18;
@@ -228,9 +235,6 @@ void keyPressed(unsigned char key, int x, int y) {
     
     if(pressedKeys['q']) {
         if(playerOneHasBall){
-            // Do logic to send ball flying forward
-            //ball->setDirectionVector();
-            //ball->dettachPlayer();
             ball->setDirectionVector();
             ball->isMoving = true;
             ballSpeed = 0.2f;
@@ -239,11 +243,9 @@ void keyPressed(unsigned char key, int x, int y) {
     
     if(pressedKeys['u']) {
         if(playerTwoHasBall){
-            //ball->dettachPlayer();
             ball->setDirectionVector();
             ball->isMoving = true;
             ballSpeed = 0.2f;
-            // Do logic to send ball flying forward too
         }
     }
     
@@ -295,6 +297,14 @@ void checkCollisions() {
         playerTwoHasBall = true;
         playerOneHasBall = false;
     }
+    
+    if(ball->inCollisionWithGoal(playerOneGoal)) {
+        printf("Score for player two!\n");
+    }
+    
+    if(ball->inCollisionWithGoal(playerTwoGoal)) {
+        printf("Score for player one!\n");
+    }
 }
 
 void display() {
@@ -318,7 +328,12 @@ void display() {
     glPushMatrix(); {
         player_two->draw();
     }glPopMatrix();
-
+    
+    ambientProps->draw();
+    
+    playerOneGoal->draw();
+    playerTwoGoal->draw();
+    
     checkCollisions();
 	glutSwapBuffers();
 }
@@ -326,6 +341,8 @@ void display() {
 
 void idle() {
 	glutPostRedisplay();
+    
+    ambientProps->animate();
     
     if(speedPlayerOne != 0) {
         player_one->animate();

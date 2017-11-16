@@ -33,8 +33,8 @@ public:
 private:
     
     // Goals are just part of this class
-    Goal* goalOne;
-    Goal* goalTwo;
+    //Goal* goalOne;
+    //Goal* goalTwo;
     Skybox* skybox;
     
     GLMmodel* soccerField;

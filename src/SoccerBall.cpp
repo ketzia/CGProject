@@ -8,6 +8,25 @@ SoccerBall::SoccerBall(float* speed) {
     isMoving = false;
 }
 
+void SoccerBall::checkFieldBoundaries() {
+    if(position.x > 12) {
+        position.x = 12;
+    }
+    
+    if(position.x < -12) {
+        position.x = -12;
+    }
+    
+    if(position.z > 24) {
+        position.z = 24;
+    }
+    
+    if(position.z < -24) {
+        position.z = -24;
+    }
+}
+
+
 void SoccerBall::draw() {
     
     if(isMoving) {
@@ -16,9 +35,11 @@ void SoccerBall::draw() {
         //position.x += attachedPlayer->directionVector.x * (*speed);
         //position.z += attachedPlayer->directionVector.z * (*speed);
     }
+    
     glPushMatrix();{
         glTranslatef(position.x, position.y , position.z);
         glColor3f(1, 1, 1);
+        checkFieldBoundaries();
         glutSolidSphere(radius, 20, 20);
     }glPopMatrix();
     //glColor3f(1, 1, 1);
@@ -49,7 +70,22 @@ bool SoccerBall::inCollisionWithPlayer(PlayerNPC* player) {
         attachedPlayer = player;
         return true;
     } else {
-        //dettachPlayer();
         return false;
     }
 }
+
+bool SoccerBall::inCollisionWithGoal(Goal* goal) {
+    float sum = radius + goal->radius;
+    float xComponent = pow(goal->position.x - position.x,2);
+    float yComponent = 0;
+    float zComponent = pow(goal->position.z - position.z,2);
+    
+    float distance = sqrt(xComponent + yComponent + zComponent);
+    
+    if(distance < sum) {
+        return true;
+    } else {
+        return false;
+    }
+}
+

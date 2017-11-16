@@ -13,9 +13,9 @@ SoccerField::SoccerField(float width, float depth, float posY, Color color) {
     
     topLeft_b.x = -width;topLeft_b.y = posY;topLeft_b.z = -depth;
     lowLeft_b.x = -width;lowLeft_b.y = posY;lowLeft_b.z = depth;
-    goalOne = new Goal(-width/2, posY, -depth/2+1, -90);
-    goalTwo = new Goal(width/2, posY, depth/2-1, 90);
-    skybox = new Skybox(50);
+    //goalOne = new Goal(-width/2, posY, -depth/2+1, -90);
+    //goalTwo = new Goal(width/2, posY, depth/2-1, 90);
+    skybox = new Skybox(60);
     
     mat_specular       = new GLfloat[4]; //<------------------------Asignar memoria
     mat_specular[0]    = 1.0f; //<----------------------------------S0r
@@ -46,12 +46,8 @@ void SoccerField::draw() {
     }glPopMatrix();
    
     glPushMatrix(); {
-        //goalOne->draw();
         skybox->draw();
     }glPopMatrix();
     
-    glPushMatrix();{
-        //goalTwo->draw();
-    }glPopMatrix();
     
 }

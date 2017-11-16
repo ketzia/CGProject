@@ -10,21 +10,17 @@
 #include <math.h>
 #endif
 
+#include "vectors.h"
 #include "glm.h"
 
 class Goal {
     
 public:
-    Goal(float positionX, float positionY, float positionZ, float rotationY);
+    Goal(float radius, float x, float z);
     ~Goal();
+    vector3 position;
+    float radius;
     void draw();
-    GLMmodel* model;
-    float positionX, positionY, positionZ, rotationY;
-    
-private:
-    GLfloat* mat_specular;
-    GLfloat* mat_diffuse;
-    GLfloat* mat_shininess;
     
 };
 
