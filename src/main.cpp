@@ -165,8 +165,8 @@ void init() {
     Color RED;RED.r = 1.0;RED.g = 0.0;RED.b=0.0;
     Color DEEPSKYBLUE;DEEPSKYBLUE.r = 0.0;DEEPSKYBLUE.g = 0.75; DEEPSKYBLUE.b = 1.0;
     Color MONZA;MONZA.r = 0.81;MONZA.g = 0.0;MONZA.b = 0.06;
-    Color GOLD;GOLD.r = 0.83f;GOLD.g = 0.69f;GOLD.b = 1.0f;
-    
+    Color GOLD;GOLD.r = 0.83f;GOLD.g = 0.69f;GOLD.b = 0.22f;
+    Color BLUE;BLUE.r = 0.0f;BLUE.g = 0.0f;BLUE.b = 1.0f;
     
     // Positions
     ballPosition.x = 0.0;ballPosition.y = -0.8;ballPosition.z =0;
@@ -195,7 +195,7 @@ void init() {
     soccerField = new SoccerField(14, 28, -1, GRASS_GREEN);
     ambientProps = new AmbientProps();
     player_one = new PlayerNPC(&(rotationPlayerOne), &(speedPlayerOne), GOLD, 1);
-    player_two = new PlayerNPC(&(rotationPlayerTwo), &(speedPlayerTwo), MONZA, -1);
+    player_two = new PlayerNPC(&(rotationPlayerTwo), &(speedPlayerTwo), RED, -1);
     ball = new SoccerBall(&(ballSpeed));
     playerOneGoal = new Goal(2.2, -0.2, 23);
     playerTwoGoal = new Goal(2.2, -0.2, -23);
@@ -331,8 +331,8 @@ void display() {
     
     ambientProps->draw();
     
-    playerOneGoal->draw();
-    playerTwoGoal->draw();
+    //playerOneGoal->draw();
+    //playerTwoGoal->draw();
     
     checkCollisions();
 	glutSwapBuffers();

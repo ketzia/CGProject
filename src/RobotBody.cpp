@@ -1,7 +1,7 @@
 #include "robotBody.h"
 #include "glm.h"
 
-RobotBody::RobotBody() {
+RobotBody::RobotBody(Color mainColor) {
     torso = glmReadOBJ("/Users/ernesto/Code/Graficas Computacionales/Models/SoldierCut/torso/torso.obj");
     
     glmVertexNormals(torso, 45.0f, false);
@@ -22,9 +22,9 @@ RobotBody::RobotBody() {
     torso_mat_specular[3]    = 1.0f; //a
     
     torso_mat_diffuse        = new GLfloat[4];
-    torso_mat_diffuse[0]     = 0.83f; //r
-    torso_mat_diffuse[1]     = 0.69f; //g
-    torso_mat_diffuse[2]     = 0.22f; //b
+    torso_mat_diffuse[0]     = mainColor.r; //r
+    torso_mat_diffuse[1]     = mainColor.g; //g
+    torso_mat_diffuse[2]     = mainColor.b; //b
     torso_mat_diffuse[3]     = 1.0f;  //a
     
     torso_mat_shininess     = new GLfloat[1];

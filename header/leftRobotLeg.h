@@ -11,11 +11,12 @@
 #endif
 
 #include "glm.h"
+#include "color.h"
 
 class LeftRobotLeg {
     
 public:
-    LeftRobotLeg();
+    LeftRobotLeg(Color mainColor);
     ~LeftRobotLeg();
     void draw();
     void animate();

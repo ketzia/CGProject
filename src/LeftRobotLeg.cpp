@@ -1,7 +1,7 @@
 #include "leftRobotLeg.h"
 #include "glm.h"
 
-LeftRobotLeg::LeftRobotLeg() {
+LeftRobotLeg::LeftRobotLeg(Color mainColor) {
     lowerLeg = glmReadOBJ("/Users/ernesto/Code/Graficas Computacionales/Models/SoldierCut/pie_R/pie_R.obj");
     upperLeg = glmReadOBJ("/Users/ernesto/Code/Graficas Computacionales/Models/SoldierCut/upperLeg_R/upperLeg_R.obj");
     
@@ -20,37 +20,37 @@ LeftRobotLeg::LeftRobotLeg() {
     lowerLegAngle = 0;
     lowerLegBounce = false;
     
-    /** Lower Leg Materials  **/
-    lowerLeg_mat_specular       = new GLfloat[4]; //<------------------------Asignar memoria
-    lowerLeg_mat_specular[0]    = 1.0f; //<----------------------------------S0r
-    lowerLeg_mat_specular[1]    = 1.0f; //<----------------------------------S0g
-    lowerLeg_mat_specular[2]    = 1.0f; //<----------------------------------S0b
-    lowerLeg_mat_specular[3]    = 1.0f; //<----------------------------------S0a
+    /** Lower Leg Material is MainColor  **/
+    lowerLeg_mat_specular       = new GLfloat[4];
+    lowerLeg_mat_specular[0]    = 1.0f;
+    lowerLeg_mat_specular[1]    = 1.0f;
+    lowerLeg_mat_specular[2]    = 1.0f;
+    lowerLeg_mat_specular[3]    = 1.0f;
     
-    lowerLeg_mat_diffuse        = new GLfloat[4]; //<------------------------Asignar memoria
-    lowerLeg_mat_diffuse[0]     = 0.0f; //<----------------------------------D0r
-    lowerLeg_mat_diffuse[1]     = 0.0f; //<----------------------------------D0g
-    lowerLeg_mat_diffuse[2]     = 0.0f; //<----------------------------------D0b
-    lowerLeg_mat_diffuse[3]     = 1.0f; //<----------------------------------D0a
+    lowerLeg_mat_diffuse        = new GLfloat[4];
+    lowerLeg_mat_diffuse[0]     = mainColor.r;
+    lowerLeg_mat_diffuse[1]     = mainColor.g;
+    lowerLeg_mat_diffuse[2]     = mainColor.b;
+    lowerLeg_mat_diffuse[3]     = 1.0f;
     
-    lowerLeg_mat_shininess      = new GLfloat[1]; //<------------------------Asignar memoria
-    lowerLeg_mat_shininess[0]   = 60.0f; //<---------------------------------Exponente especular del material 0
+    lowerLeg_mat_shininess      = new GLfloat[1];
+    lowerLeg_mat_shininess[0]   = 60.0f;
     
-    /** Upper Leg Materials  **/
-    upperLeg_mat_specular       = new GLfloat[4]; //<------------------------Asignar memoria
-    upperLeg_mat_specular[0]    = 1.0f; //<----------------------------------S0r
-    upperLeg_mat_specular[1]    = 1.0f; //<----------------------------------S0g
-    upperLeg_mat_specular[2]    = 1.0f; //<----------------------------------S0b
-    upperLeg_mat_specular[3]    = 1.0f; //<----------------------------------S0a
+    /** Upper Leg Material is always dark black (without specular values) **/
+    upperLeg_mat_specular       = new GLfloat[4];
+    upperLeg_mat_specular[0]    = 0.0f;
+    upperLeg_mat_specular[1]    = 0.0f;
+    upperLeg_mat_specular[2]    = 0.0f;
+    upperLeg_mat_specular[3]    = 1.0f;
     
-    upperLeg_mat_diffuse        = new GLfloat[4]; //<------------------------Asignar memoria
-    upperLeg_mat_diffuse[0]     = 0.83f; //<----------------------------------D0r
-    upperLeg_mat_diffuse[1]     = 0.69f; //<----------------------------------D0g
-    upperLeg_mat_diffuse[2]     = 0.22f; //<----------------------------------D0b
-    upperLeg_mat_diffuse[3]     = 1.0f; //<----------------------------------D0a
+    upperLeg_mat_diffuse        = new GLfloat[4];
+    upperLeg_mat_diffuse[0]     = 0.0;
+    upperLeg_mat_diffuse[1]     = 0.0;
+    upperLeg_mat_diffuse[2]     = 0.0;
+    upperLeg_mat_diffuse[3]     = 1.0f;
     
-    upperLeg_mat_shininess     = new GLfloat[1]; //<------------------------Asignar memoria
-    upperLeg_mat_shininess[0]   = 60.0f; //<---------------------------------Exponente especular del material 0
+    upperLeg_mat_shininess     = new GLfloat[1];
+    upperLeg_mat_shininess[0]   = 60.0f;
 }
 
 void LeftRobotLeg::draw() {
@@ -66,57 +66,23 @@ void LeftRobotLeg::draw() {
             glTranslatef(-0.1, 0.50, 0);
             glRotatef(upperLegAngle, 1, 0, 0);
             glTranslatef(0.1, -0.50, 0);
-            glMaterialfv( GL_FRONT,     GL_DIFFUSE,   lowerLeg_mat_diffuse        );
-            glMaterialfv( GL_FRONT,  GL_SPECULAR,  lowerLeg_mat_specular    );
-            glMaterialfv( GL_FRONT,  GL_SHININESS, lowerLeg_mat_shininess    );
+            glMaterialfv( GL_FRONT,     GL_DIFFUSE,   upperLeg_mat_diffuse        );
+            glMaterialfv( GL_FRONT,  GL_SPECULAR,  upperLeg_mat_specular    );
+            glMaterialfv( GL_FRONT,  GL_SHININESS, upperLeg_mat_shininess    );
             glmDraw(upperLeg, GLM_SMOOTH);
             
             // Lower Leg
             glPushMatrix(); {
                 glRotatef(lowerLegAngle, 1, 0, 0);
                 glTranslatef(0.1, -0.50, 0);
-                glMaterialfv( GL_FRONT,     GL_DIFFUSE,   upperLeg_mat_diffuse        );
-                glMaterialfv( GL_FRONT,  GL_SPECULAR,  upperLeg_mat_specular    );
-                glMaterialfv( GL_FRONT,  GL_SHININESS, upperLeg_mat_shininess    );
+                glMaterialfv( GL_FRONT,     GL_DIFFUSE,   lowerLeg_mat_diffuse        );
+                glMaterialfv( GL_FRONT,  GL_SPECULAR,  lowerLeg_mat_specular    );
+                glMaterialfv( GL_FRONT,  GL_SHININESS, lowerLeg_mat_shininess    );
                 glmDraw(lowerLeg, GLM_SMOOTH);
             }glPopMatrix();
         }glPopMatrix();
         
     }glPopMatrix();
-    
-    /*
-    glPushMatrix(); {
-        // Locate Object
-        glTranslatef(0, 0, 0);
-        glRotatef(-90, 0, 1, 0);
-        
-        // Lower Leg
-        glPushMatrix();{
-            glTranslatef(0, lowerLegHeight, 0);
-            glMaterialfv( GL_FRONT,     GL_DIFFUSE,   upperLeg_mat_diffuse        );
-            glMaterialfv( GL_FRONT,  GL_SPECULAR,  upperLeg_mat_specular    );
-            glMaterialfv( GL_FRONT,  GL_SHININESS, upperLeg_mat_shininess    );
-            glmDraw(lowerLeg, GLM_SMOOTH);
-        }glPopMatrix();
-        
-        
-        // Uper Leg
-        glPushMatrix();{
-            // Position Object
-            glTranslatef(-0.1, lowerLegHeight + 0.50, 0);
-            // Animation
-            glPushMatrix(); {
-                glRotatef(upperLegAngle, 1, 0, 0);
-                glMaterialfv( GL_FRONT,     GL_DIFFUSE,   lowerLeg_mat_diffuse        );
-                glMaterialfv( GL_FRONT,  GL_SPECULAR,  lowerLeg_mat_specular    );
-                glMaterialfv( GL_FRONT,  GL_SHININESS, lowerLeg_mat_shininess    );
-                glmDraw(upperLeg, GLM_SMOOTH);
-            }glPopMatrix();
-        }glPopMatrix();
-    }glPopMatrix();
-     */
-    
-    
     
 }
 

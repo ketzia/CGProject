@@ -29,11 +29,11 @@ PlayerNPC::PlayerNPC(float *rotationY, float *speed, Color mainColor, float init
     }
     
     // Load body parts
-    rightLeg = new RightRobotLeg();
-    leftLeg = new LeftRobotLeg();
-    robotBody = new RobotBody();
-    rightArm = new RightRobotArm();
-    leftArm = new LeftRobotArm();
+    rightLeg = new RightRobotLeg(mainColor);
+    leftLeg = new LeftRobotLeg(mainColor);
+    robotBody = new RobotBody(mainColor);
+    rightArm = new RightRobotArm(mainColor);
+    leftArm = new LeftRobotArm(mainColor);
     head = new RobotHead();
     
     collisionRadius = 0.9f;

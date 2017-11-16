@@ -11,11 +11,12 @@
 #endif
 
 #include "glm.h"
+#include "color.h"
 
 class RightRobotLeg {
     
 public:
-    RightRobotLeg();
+    RightRobotLeg(Color mainColor);
     ~RightRobotLeg();
     void draw();
     void animate();
@@ -23,11 +24,13 @@ public:
     GLMmodel* upperLeg;
     
 private:
-    
+        
+    // This color is mainColor
     GLfloat* lowerLeg_mat_specular;
     GLfloat* lowerLeg_mat_diffuse;
     GLfloat* lowerLeg_mat_shininess;
     
+    // This is always black
     GLfloat* upperLeg_mat_specular;
     GLfloat* upperLeg_mat_diffuse;
     GLfloat* upperLeg_mat_shininess;

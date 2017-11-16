@@ -11,11 +11,11 @@
 #endif
 
 #include "glm.h"
-
+#include "color.h"
 class RobotBody {
     
 public:
-    RobotBody();
+    RobotBody(Color mainColor);
     ~RobotBody();
     void draw();
     void animate();

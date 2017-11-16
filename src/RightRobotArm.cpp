@@ -3,7 +3,7 @@
 #include "glm.h"
 #include <stdio.h>
 
-RightRobotArm::RightRobotArm() {
+RightRobotArm::RightRobotArm(Color mainColor) {
     lowerArm = glmReadOBJ("/Users/ernesto/Code/Graficas Computacionales/Models/SoldierCut/antebrazo_L/antebrazo_L.obj");
     upperArm = glmReadOBJ("/Users/ernesto/Code/Graficas Computacionales/Models/SoldierCut/hombro_L/hombro_L.obj");
     
@@ -22,37 +22,37 @@ RightRobotArm::RightRobotArm() {
     lowerArmAngle = -60;
     lowerArmBounce = true;
     
-    /** Lower Leg Materials  **/
-    upperArm_mat_specular       = new GLfloat[4]; //<------------------------Asignar memoria
-    upperArm_mat_specular[0]    = 1.0f; //<----------------------------------S0r
-    upperArm_mat_specular[1]    = 1.0f; //<----------------------------------S0g
-    upperArm_mat_specular[2]    = 1.0f; //<----------------------------------S0b
-    upperArm_mat_specular[3]    = 1.0f; //<----------------------------------S0a
+    /** Upper Arm Material is always dark black  **/
+    upperArm_mat_specular       = new GLfloat[4];
+    upperArm_mat_specular[0]    = 0.0f;
+    upperArm_mat_specular[1]    = 0.0f;
+    upperArm_mat_specular[2]    = 0.0f;
+    upperArm_mat_specular[3]    = 1.0f;
     
-    upperArm_mat_diffuse        = new GLfloat[4]; //<------------------------Asignar memoria
-    upperArm_mat_diffuse[0]     = 0.0f; //<----------------------------------D0r
-    upperArm_mat_diffuse[1]     = 0.0f; //<----------------------------------D0g
-    upperArm_mat_diffuse[2]     = 0.0f; //<----------------------------------D0b
-    upperArm_mat_diffuse[3]     = 1.0f; //<----------------------------------D0a
+    upperArm_mat_diffuse        = new GLfloat[4];
+    upperArm_mat_diffuse[0]     = 0.0f;
+    upperArm_mat_diffuse[1]     = 0.0f;
+    upperArm_mat_diffuse[2]     = 0.0f;
+    upperArm_mat_diffuse[3]     = 1.0f;
     
-    upperArm_mat_shininess      = new GLfloat[1]; //<------------------------Asignar memoria
-    upperArm_mat_shininess[0]   = 60.0f; //<---------------------------------Exponente especular del material 0
+    upperArm_mat_shininess      = new GLfloat[1];
+    upperArm_mat_shininess[0]   = 60.0f;
     
-    /** Upper Leg Materials  **/
-    lowerArm_mat_specular       = new GLfloat[4]; //<------------------------Asignar memoria
-    lowerArm_mat_specular[0]    = 1.0f; //<----------------------------------S0r
-    lowerArm_mat_specular[1]    = 1.0f; //<----------------------------------S0g
-    lowerArm_mat_specular[2]    = 1.0f; //<----------------------------------S0b
-    lowerArm_mat_specular[3]    = 1.0f; //<----------------------------------S0a
+    /** Lower Arm Material is main color  **/
+    lowerArm_mat_specular       = new GLfloat[4];
+    lowerArm_mat_specular[0]    = 1.0f;
+    lowerArm_mat_specular[1]    = 1.0f;
+    lowerArm_mat_specular[2]    = 1.0f;
+    lowerArm_mat_specular[3]    = 1.0f;
     
-    lowerArm_mat_diffuse        = new GLfloat[4]; //<------------------------Asignar memoria
-    lowerArm_mat_diffuse[0]     = 0.83f; //<----------------------------------D0r
-    lowerArm_mat_diffuse[1]     = 0.69f; //<----------------------------------D0g
-    lowerArm_mat_diffuse[2]     = 0.22f; //<----------------------------------D0b
-    lowerArm_mat_diffuse[3]     = 1.0f; //<----------------------------------D0a
+    lowerArm_mat_diffuse        = new GLfloat[4];
+    lowerArm_mat_diffuse[0]     = mainColor.r;
+    lowerArm_mat_diffuse[1]     = mainColor.g;
+    lowerArm_mat_diffuse[2]     = mainColor.b;
+    lowerArm_mat_diffuse[3]     = 1.0f;
     
-    lowerArm_mat_shininess     = new GLfloat[1]; //<------------------------Asignar memoria
-    lowerArm_mat_shininess[0]   = 60.0f; //<---------------------------------Exponente especular del material 0
+    lowerArm_mat_shininess     = new GLfloat[1];
+    lowerArm_mat_shininess[0]   = 60.0f;
 }
 
 void RightRobotArm::draw() {
