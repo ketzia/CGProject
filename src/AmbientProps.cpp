@@ -16,13 +16,16 @@ void AmbientProps::draw() {
             glColor3f(1,0.68,0);
             glRotatef(sunRotation, 0, 1, 0);
             glTranslatef(35, 0, 0);
-            glutWireSphere(8, 80, 80);
+            glRotatef(sunRotation, 0, 1, 0);
+            //glutWireSphere(8, 80, 80);
+            glutSolidSphere(8, 80, 80);
             {
                 glRotatef(moonRotation, 0, 1, 1);
                 glTranslatef(12, 0, 0);
                 glColor3f(0, 0.49, 1);
                 glScalef(0.2, 0.2, 0.2);
-                glutWireSphere(8, 80, 80);
+                //glutWireSphere(8, 80, 80);
+                glutSolidSphere(8, 80, 80);
             }
         }glPopMatrix();
         

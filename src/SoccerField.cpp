@@ -46,7 +46,9 @@ void SoccerField::draw() {
     }glPopMatrix();
    
     glPushMatrix(); {
+        glDisable(GL_LIGHTING);
         skybox->draw();
+        glEnable(GL_LIGHTING);
     }glPopMatrix();
     
     

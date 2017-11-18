@@ -28,6 +28,8 @@
 #include "playerNPC.h"
 #include "utils.h"
 #include "ambientProps.h"
+#include "ShaderObject.h"
+#include "goalkeeper.h"
 
 // Lights
 GLfloat*    light0_position; //<-------------------------------------Light 0 - location
@@ -49,6 +51,13 @@ PlayerNPC* player_two;
 AmbientProps* ambientProps;
 Goal* playerOneGoal;
 Goal* playerTwoGoal;
+Goalkeeper* goalkeeperPlayerOne;
+Goalkeeper* goalkeeperPlayerTwo;
+
+// Shaders
+ShaderObject *sun;
+
+
 
 // Position of the ball to be used later
 vector3 ballPosition;
@@ -71,6 +80,8 @@ bool* pressedKeys;
 
 bool playerOneHasBall;
 bool playerTwoHasBall;
+
+long _time;
 
 void setupLighting() {
     //->LIGHT 0 begins
@@ -145,11 +156,13 @@ void setupLighting() {
 
 
 void init() {
+    //glEnable(GL_NORMALIZE);
     glClearColor(0.2, 0.2, 0.2, 1.0);
     glShadeModel(GL_SMOOTH);
+    glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_FASTEST);
+    glHint(GL_POLYGON_SMOOTH_HINT, GL_FASTEST);
     setupLighting();
     // Light setup
-    //glEnable(GL_NORMALIZE);
     
     // Array to store all keys pressed so far
     pressedKeys = new bool[256]();
@@ -199,7 +212,18 @@ void init() {
     ball = new SoccerBall(&(ballSpeed));
     playerOneGoal = new Goal(2.2, -0.2, 23);
     playerTwoGoal = new Goal(2.2, -0.2, -23);
+    goalkeeperPlayerOne = new Goalkeeper(GOLD, 0, 20);
+    goalkeeperPlayerTwo = new Goalkeeper(RED, 0, -20);
+    
+    float freq[] ={M_PI, M_PI};
+    float amp[]={0.2,0.2};
+    float lPos[] = {10,5.0,5.0};
+    sun = new ShaderObject("/Users/ernesto/Code/Graficas Computacionales/FinalProject/FinalProject/shaders/toonVertex.glsl", "/Users/ernesto/Code/Graficas Computacionales/FinalProject/FinalProject/shaders/toonFragment.glsl");
+    sun->activate ();
+        sun->setUniformi((char*)"toon", 1);
+    sun->deactivate ();
 
+    srand( (unsigned)time( NULL ) );
 }
 
 
@@ -238,6 +262,7 @@ void keyPressed(unsigned char key, int x, int y) {
             ball->setDirectionVector();
             ball->isMoving = true;
             ballSpeed = 0.2f;
+            playerOneHasBall = false;
         }
     }
     
@@ -246,6 +271,7 @@ void keyPressed(unsigned char key, int x, int y) {
             ball->setDirectionVector();
             ball->isMoving = true;
             ballSpeed = 0.2f;
+            playerTwoHasBall = false;
         }
     }
     
@@ -299,11 +325,28 @@ void checkCollisions() {
     }
     
     if(ball->inCollisionWithGoal(playerOneGoal)) {
+        // TODO add score
         printf("Score for player two!\n");
+        ball = new SoccerBall(&(ballSpeed));
     }
     
     if(ball->inCollisionWithGoal(playerTwoGoal)) {
+        // TODO add score
         printf("Score for player one!\n");
+        ball = new SoccerBall(&(ballSpeed));
+        
+    }
+    
+    if(ball->inCollisionWithGoalkeeper(goalkeeperPlayerOne)) {
+        // bounce ball back
+        ball->directionVector.x *= -1;
+        ball->directionVector.z *= -1;
+    }
+    
+    if(ball->inCollisionWithGoalkeeper(goalkeeperPlayerTwo)) {
+        // bounce ball back
+        ball->directionVector.x *= -1;
+        ball->directionVector.z *= -1;
     }
 }
 
@@ -329,8 +372,14 @@ void display() {
         player_two->draw();
     }glPopMatrix();
     
-    ambientProps->draw();
+    sun->activate ();
+        _time = glutGet(GLUT_ELAPSED_TIME);
+        sun->setUniformf((char*)"time", _time);
+        ambientProps->draw();
+    sun->deactivate();
     
+    goalkeeperPlayerOne->draw();
+    goalkeeperPlayerTwo->draw();
     //playerOneGoal->draw();
     //playerTwoGoal->draw();
     
@@ -340,6 +389,7 @@ void display() {
 
 
 void idle() {
+    
 	glutPostRedisplay();
     
     ambientProps->animate();
@@ -359,6 +409,10 @@ void idle() {
     }else if(ballSpeed > 0){
         ballSpeed -= 0.001f;
     }
+    
+    goalkeeperPlayerOne->followBall(ball);
+    goalkeeperPlayerTwo->followBall(ball);
+    
     
     //if(ballSpeed < 0) {
         //ballSpeed = 0;
