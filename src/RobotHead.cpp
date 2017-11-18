@@ -2,7 +2,7 @@
 #include "glm.h"
 
 RobotHead::RobotHead() {
-    head = glmReadOBJ("/Users/ernesto/Code/Graficas Computacionales/Models/SoldierCut/Head/head.obj");
+    head = glmReadOBJ("/Users/ernesto/Code/Graficas Computacionales/Models/head.obj");
     
     glmVertexNormals(head, 45.0f, false);
     glmFacetNormals(head);

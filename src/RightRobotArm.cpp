@@ -4,8 +4,8 @@
 #include <stdio.h>
 
 RightRobotArm::RightRobotArm(Color mainColor) {
-    lowerArm = glmReadOBJ("/Users/ernesto/Code/Graficas Computacionales/Models/SoldierCut/antebrazo_L/antebrazo_L.obj");
-    upperArm = glmReadOBJ("/Users/ernesto/Code/Graficas Computacionales/Models/SoldierCut/hombro_L/hombro_L.obj");
+    lowerArm = glmReadOBJ("/Users/ernesto/Code/Graficas Computacionales/Models/antebrazo_L.obj");
+    upperArm = glmReadOBJ("/Users/ernesto/Code/Graficas Computacionales/Models/hombro_L.obj");
     
     glmVertexNormals(lowerArm, 45.0f, false);
     glmVertexNormals(upperArm, 45.0f, false);

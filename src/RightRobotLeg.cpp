@@ -2,8 +2,8 @@
 #include "glm.h"
 
 RightRobotLeg::RightRobotLeg(Color mainColor) {
-    lowerLeg = glmReadOBJ("/Users/ernesto/Code/Graficas Computacionales/Models/SoldierCut/pie_L/pie_L.obj");
-    upperLeg = glmReadOBJ("/Users/ernesto/Code/Graficas Computacionales/Models/SoldierCut/upperLeg_L/upperLeg_L.obj");
+    lowerLeg = glmReadOBJ("/Users/ernesto/Code/Graficas Computacionales/Models/pie_L.obj");
+    upperLeg = glmReadOBJ("/Users/ernesto/Code/Graficas Computacionales/Models/upperLeg_L.obj");
     
     glmVertexNormals(lowerLeg, 45.0f, false);
     glmVertexNormals(upperLeg, 45.0f, false);

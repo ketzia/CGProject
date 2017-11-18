@@ -2,8 +2,8 @@
 #include "glm.h"
 
 LeftRobotArm::LeftRobotArm(Color mainColor) {
-    lowerArm = glmReadOBJ("/Users/ernesto/Code/Graficas Computacionales/Models/SoldierCut/antebrazo_R/antebrazo_derecho.obj");
-    upperArm = glmReadOBJ("/Users/ernesto/Code/Graficas Computacionales/Models/SoldierCut/hombro_R/hombro_R.obj");
+    lowerArm = glmReadOBJ("/Users/ernesto/Code/Graficas Computacionales/Models/antebrazo_derecho.obj");
+    upperArm = glmReadOBJ("/Users/ernesto/Code/Graficas Computacionales/Models/hombro_R.obj");
     
     glmVertexNormals(lowerArm, 45.0f, false);
     glmVertexNormals(upperArm, 45.0f, false);

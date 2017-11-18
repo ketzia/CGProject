@@ -17,7 +17,7 @@ void AmbientProps::draw() {
             glRotatef(sunRotation, 0, 1, 0);
             glTranslatef(35, 0, 0);
             glRotatef(sunRotation, 0, 1, 0);
-            //glutWireSphere(8, 80, 80);
+            
             glutSolidSphere(8, 80, 80);
             {
                 glRotatef(moonRotation, 0, 1, 1);
@@ -27,6 +27,16 @@ void AmbientProps::draw() {
                 //glutWireSphere(8, 80, 80);
                 glutSolidSphere(8, 80, 80);
             }
+            
+            
+            // Venus
+            glPushMatrix();{
+                glRotatef(venusRotation, 0, 1, 0);
+                glTranslatef(12, 0, 0);
+                glScalef(0.5, 0.5, 0.5);
+                glColor3f(0, 1, 0);
+                glutSolidSphere(8,10,10);
+            }glPopMatrix();
         }glPopMatrix();
         
         

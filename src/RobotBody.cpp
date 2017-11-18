@@ -2,7 +2,7 @@
 #include "glm.h"
 
 RobotBody::RobotBody(Color mainColor) {
-    torso = glmReadOBJ("/Users/ernesto/Code/Graficas Computacionales/Models/SoldierCut/torso/torso.obj");
+    torso = glmReadOBJ("/Users/ernesto/Code/Graficas Computacionales/Models/torso.obj");
     
     glmVertexNormals(torso, 45.0f, false);
     glmFacetNormals(torso);

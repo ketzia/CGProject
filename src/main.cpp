@@ -75,6 +75,10 @@ float worldRotation;
 float deltaMov;
 int isCameraMoving;
 
+// Score variables
+int scorePlayerOne;
+int scorePlayerTwo;
+
 // Array to store all pressed keys
 bool* pressedKeys;
 
@@ -82,6 +86,36 @@ bool playerOneHasBall;
 bool playerTwoHasBall;
 
 long _time;
+
+char scoreText[22];
+
+void displayText(int x, int y, char *txt) {
+    GLboolean lighting;
+    GLint viewportCoords[4];
+    glColor3f(1.0,1.0,1.0);
+    glGetBooleanv(GL_LIGHTING, &lighting);
+    glGetIntegerv(GL_VIEWPORT, viewportCoords);
+    if(lighting) glDisable( GL_LIGHTING );
+    
+    glMatrixMode( GL_PROJECTION );
+    glPushMatrix();
+    glLoadIdentity();
+    gluOrtho2D( 0.0, viewportCoords[2], 0.0, viewportCoords[3]);
+    glMatrixMode( GL_MODELVIEW );
+    glPushMatrix();
+    glLoadIdentity();
+    
+    glRasterPos2i( x, viewportCoords[3]-y );
+    
+    
+    while (*txt) {glutBitmapCharacter( GLUT_BITMAP_HELVETICA_18, *txt ); txt++;}
+    glPopMatrix();
+    glMatrixMode( GL_PROJECTION );
+    glPopMatrix();
+    glMatrixMode( GL_MODELVIEW );
+    
+    if(lighting) glEnable( GL_LIGHTING );
+}
 
 void setupLighting() {
     //->LIGHT 0 begins
@@ -171,7 +205,7 @@ void init() {
     deltaMov = 0.0f;
     isCameraMoving = -1;
     worldRotation = 0.0f;
-    radius = 5.0f;
+    radius = 5.0f; // 5
     
     // Color constants
     Color GRASS_GREEN;GRASS_GREEN.r = 0.27;GRASS_GREEN.g = 0.47;GRASS_GREEN.b = 0.24;
@@ -192,6 +226,10 @@ void init() {
     speedPlayerOne = 0;
     speedPlayerTwo = 0;
     ballSpeed = 0.0f;
+    
+    // Character scores
+    scorePlayerOne = 0;
+    scorePlayerTwo = 0;
     
     // Helper flags for ball logic
     playerOneHasBall = false;
@@ -223,6 +261,7 @@ void init() {
         sun->setUniformi((char*)"toon", 1);
     sun->deactivate ();
 
+    
     srand( (unsigned)time( NULL ) );
 }
 
@@ -261,7 +300,7 @@ void keyPressed(unsigned char key, int x, int y) {
         if(playerOneHasBall){
             ball->setDirectionVector();
             ball->isMoving = true;
-            ballSpeed = 0.2f;
+            ballSpeed = 0.25f;
             playerOneHasBall = false;
         }
     }
@@ -270,7 +309,7 @@ void keyPressed(unsigned char key, int x, int y) {
         if(playerTwoHasBall){
             ball->setDirectionVector();
             ball->isMoving = true;
-            ballSpeed = 0.2f;
+            ballSpeed = 0.25f;
             playerTwoHasBall = false;
         }
     }
@@ -328,12 +367,18 @@ void checkCollisions() {
         // TODO add score
         printf("Score for player two!\n");
         ball = new SoccerBall(&(ballSpeed));
+        scorePlayerTwo += 1;
+        playerOneHasBall = false;
+        playerTwoHasBall = false;
     }
     
     if(ball->inCollisionWithGoal(playerTwoGoal)) {
         // TODO add score
         printf("Score for player one!\n");
         ball = new SoccerBall(&(ballSpeed));
+        scorePlayerOne += 1;
+        playerOneHasBall = false;
+        playerTwoHasBall = false;
         
     }
     
@@ -352,16 +397,21 @@ void checkCollisions() {
 
 void display() {
     
+    
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
     gluLookAt(radius * cos(toRadians(worldRotation)), 3 ,radius * sin(toRadians(worldRotation)),
               0, 2, 0,
               0.0, 1.0, 0.0);
     
+    displayText(5,20,scoreText);
+    
     // Draw objects
     glPushMatrix();{
         soccerField->draw();
+        sun->activate ();
         ball->draw();
+        sun->deactivate();
     }glPopMatrix();
     
     glPushMatrix(); {
@@ -383,6 +433,8 @@ void display() {
     //playerOneGoal->draw();
     //playerTwoGoal->draw();
     
+    
+    
     checkCollisions();
 	glutSwapBuffers();
 }
@@ -390,6 +442,7 @@ void display() {
 
 void idle() {
     
+    sprintf(scoreText, "Player One Score: %i | Player Two Score: %i",scorePlayerOne, scorePlayerTwo);
 	glutPostRedisplay();
     
     ambientProps->animate();
