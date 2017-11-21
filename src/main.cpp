@@ -2,8 +2,6 @@
 * Ketzia Lizette Dante-Hidalgo Bouchot A01336592
 * Ernesto Perez Martinez A01214919
 *
- * Disclaimer: Bug fixed! it was the array of booleans that was checking the pressed keys -.-
- 
  Keys for player one: WASD
  Keys for player two: IJKL
 */
@@ -56,8 +54,6 @@ Goalkeeper* goalkeeperPlayerTwo;
 
 // Shaders
 ShaderObject *sun;
-
-
 
 // Position of the ball to be used later
 vector3 ballPosition;
@@ -175,21 +171,25 @@ void setupLighting() {
     glLightfv( GL_LIGHT0, GL_AMBIENT,   light0_ambient);
     glLightfv( GL_LIGHT0, GL_DIFFUSE,   light0_diffuse);
     glLightfv( GL_LIGHT0, GL_SPECULAR,  light0_specular);
+    
     // Configure LIGHT 1:
     glLightfv( GL_LIGHT1, GL_POSITION,  light1_position );
     glLightfv( GL_LIGHT1, GL_AMBIENT,   light1_ambient);
     glLightfv( GL_LIGHT1, GL_DIFFUSE,   light1_diffuse);
     glLightfv( GL_LIGHT1, GL_SPECULAR,  light1_specular);
+    
     // Enable LIGHT 0:
     glEnable( GL_LIGHT0 );
     // Enable LIGHT 1:
     glEnable( GL_LIGHT1 );
+    
     // Enable lighting:
     glEnable( GL_LIGHTING );
 }
 
 
 void init() {
+    
     //glEnable(GL_NORMALIZE);
     glClearColor(0.2, 0.2, 0.2, 1.0);
     glShadeModel(GL_SMOOTH);
@@ -268,7 +268,7 @@ void init() {
 
 void keyPressed(unsigned char key, int x, int y) {
    
-    pressedKeys[key] = true;
+    pressedKeys[key] = true; //
     
     if(pressedKeys['w']) {
         speedPlayerOne = 0.07f;
@@ -276,7 +276,7 @@ void keyPressed(unsigned char key, int x, int y) {
     if(pressedKeys['s']) {
         speedPlayerOne = -0.07f;
     }
-    if(pressedKeys['a']) {
+    if(pressedKeys['a']) { // 97 pressedKeys[97] == true
         rotationPlayerOne += 18;
     }
     if(pressedKeys['d']) {
@@ -410,7 +410,7 @@ void display() {
     glPushMatrix();{
         soccerField->draw();
         sun->activate ();
-        ball->draw();
+            ball->draw();
         sun->deactivate();
     }glPopMatrix();
     
@@ -432,8 +432,6 @@ void display() {
     goalkeeperPlayerTwo->draw();
     //playerOneGoal->draw();
     //playerTwoGoal->draw();
-    
-    
     
     checkCollisions();
 	glutSwapBuffers();
